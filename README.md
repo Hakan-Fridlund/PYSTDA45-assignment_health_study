@@ -75,6 +75,13 @@ Additional advanced analysis:
 - **SciPy** – Statistical methods and hypothesis testing.
 - **Jupyter Notebook** – Interactive analysis and documentation.
 
+## Visualization Standards
+
+All charts and visualizations follow my
+[Data Visualization Policy](visualization_policy.md),
+with a focus on accessibility, inclusivity, readability,
+and scientific integrity.
+
 ## Repository Structure
 
 ```text
