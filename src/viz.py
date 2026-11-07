@@ -1,7 +1,9 @@
 """
-Visualization functions for the Health Study project.
-Includes a palette and long list of settings for global style parameters when imported.
-In part 1 no functions will be available, only for consistency in settings.
+Visualization settings for the Health Study project.
+Defines a shared color palette and global plotting parameters
+to ensure consistent visualizations across the project.
+
+No custom plotting functions are defined in Part 1.
 """
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -23,7 +25,7 @@ plt.rcParams['figure.facecolor'] = 'white'
 plt.rcParams['axes.facecolor'] = 'white'
 plt.rcParams['axes.prop_cycle'] = plt.cycler(color=okabe_ito)
 
-plt.rcParams['font.family'] = 'sans-serif'
+plt.rcParams['font.family'] = 'DejaVu Sans'
 plt.rcParams['font.size'] = 11
 
 plt.rcParams['axes.titlesize'] = 14
