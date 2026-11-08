@@ -12,7 +12,7 @@ The project is divided into two parts, each developed and submitted through a se
 
 The project uses `health_study_dataset.csv`, containing health-related information about study participants.
 
-| Column | Description | Unit / Values |
+| **Column** | **Description** | **Unit / Values** |
 |---|---|---|
 | `age` | Age | Years |
 | `sex` | Biological sex | M / F |
@@ -68,7 +68,7 @@ Additional advanced analysis:
 
 ## Technologies and Libraries
 
-- **Python** – Main programming language.
+- **Python 3.14.7** – Main programming language.
 - **Pandas** – Data manipulation and analysis.
 - **NumPy** – Numerical computing and statistical simulations.
 - **Matplotlib & Seaborn** – Data visualization.
@@ -77,10 +77,7 @@ Additional advanced analysis:
 
 ## Visualization Standards
 
-All charts and visualizations follow my
-[Data Visualization Policy](visualization_policy.md),
-with a focus on accessibility, inclusivity, readability,
-and scientific integrity.
+All charts and visualizations follow my [Data Visualization Policy](https://github.com/Hakan-Fridlund/PYSTDA45-assignment_health_study/blob/del1/visualization_policy.md), with a focus on accessibility, inclusivity, readability, and scientific integrity.
 
 ## Repository Structure
 
@@ -111,38 +108,75 @@ health-study/
 
 ### Prerequisites
 
-- Python 3.x
+- Python 3.14.7
 - Git
 - Jupyter Notebook or Visual Studio Code with the Jupyter extension
 
 ### Installation
 
-Clone the repository:
+**1. Clone the repository:**
 
 ```bash
 git clone <repository-url>
+```
+
+**2. Navigate to the project directory:**
+
+```bash
 cd health-study
 ```
 
-Install the required dependencies:
+**3. Create a virtual environment:**
 
 ```bash
-pip install -r requirements.txt
+python -m venv .venv
+```
+
+**4. Activate the virtual environment:**
+
+Choose the command for your operating system and terminal.
+
+Windows (PowerShell):
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+Windows (Git Bash):
+
+```bash
+source .venv/Scripts/activate
+```
+
+macOS / Linux:
+
+```bash
+source .venv/bin/activate
+```
+
+**5. Install the required dependencies:**
+
+```bash
+python -m pip install -r requirements.txt
 ```
 
 ### Running the Notebooks
 
 Switch to the desired branch:
 
-```bash
-# Part 1
-git checkout del1
+Part 1:
 
-# Part 2
+```bash
+git checkout del1
+```
+
+Part 2:
+
+```bash
 git checkout del2
 ```
 
-Open Jupyter Notebook:
+Start Jupyter Notebook:
 
 ```bash
 jupyter notebook
@@ -158,4 +192,6 @@ All analysis, code, visualizations, and explanations are documented directly in 
 
 ## Author
 
-Individual course assignment – Health Study Analysis
+Håkan Fridlund
+
+Individual course assignment – Health Study Analysis.
