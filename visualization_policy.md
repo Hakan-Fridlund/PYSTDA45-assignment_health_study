@@ -10,7 +10,7 @@ The color palette is based primarily on the **colorblind-friendly** Okabe–Ito 
 
 The original order of the Okabe–Ito palette has been modified to improve the separation between consecutive colors, particularly in grayscale reproduction. The colors should be used in the specified order to preserve these optimizations.
 
-## Okabe-Ito Palette
+## Okabe-Ito Customized Palette
 
 ![Okabe-Ito color palette](images/okabe_ito_palette.png)
 
@@ -19,13 +19,13 @@ The original order of the Okabe–Ito palette has been modified to improve the s
 The following principles guide the design of all visualizations:
 
 * **Color vision accessibility:** Colors are selected to improve distinguishability, including for people with **color vision deficiencies**.
-* **Black-and-white printing:** The color order is optimized for grayscale reproduction, particularly for the Okabe–Ito palette, to improve readability when color information is unavailable.
+* **Black-and-white printing:** The color order is optimized for grayscale reproduction, particularly for the Okabe–Ito palette, to **improve readability** when color information is unavailable.
 * **Contrast and readability:** Color combinations, clear axes, and consistent typography are used to improve legibility.
 * **Consistent design:** A shared visual standard makes it easier to compare figures within and across reports.
 * **Scientific integrity:** Visualizations should communicate statistical results clearly and objectively, without distorting or exaggerating the underlying data.
 * **Broad usability:** The palettes and design principles are intended to work across different display environments, print formats, and individual viewing conditions.
 
-Together, these principles support **inclusive** communication and improve access to the information presented.
+Together, these principles support **inclusive** communication and improve **access** to the information presented.
 
 ### Limitations – Okabe–Ito
 
@@ -66,9 +66,9 @@ The following limitations should be considered when using the Glasbey palette:
 * **Grayscale reproduction:** All 20 colors cannot be reliably distinguished in grayscale. Some color pairs have very similar lightness values.
 * **Large numbers of categories:** When using more than approximately eight series, color alone should not be relied upon to distinguish categories, even when the figure is displayed in color.
 
-For black-and-wight printing, and whenever color separation is insufficient, additional visual identifiers such as line styles, markers, patterns, direct labels, or text identifiers should be used.
+For black-and-white printing, and whenever color separation is insufficient, additional visual identifiers such as line styles, markers, patterns, direct labels, or text identifiers should be used.
 
-## Usage Guidelines
+# Usage Guidelines
 
 * **Color order:** Colors must be used in the specified list order, from top to bottom, to preserve the optimizations made for color separation, **color vision deficiencies**, and grayscale reproduction.
 * **Multiple visual identifiers:** When more than eight series are displayed, color should not be the only means of distinguishing categories. Supplementary identifiers such as markers, line styles, patterns, direct labels, or text identifiers should be used where appropriate.
