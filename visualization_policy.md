@@ -10,6 +10,10 @@ The color palette is based primarily on the **colorblind-friendly** Okabe–Ito 
 
 The original order of the Okabe–Ito palette has been modified to improve the separation between consecutive colors, particularly in grayscale reproduction. The colors should be used in the specified order to preserve these optimizations.
 
+## Okabe-Ito Palette
+
+![Okabe-Ito color palette](images/okabe_ito_palette.png)
+
 ## General Considerations
 
 The following principles guide the design of all visualizations:
@@ -37,6 +41,10 @@ Depending on the chart type and intended use, the practical number of distinguis
 When the Okabe–Ito palette does not provide sufficient contrast or color separation for a particular visualization, an alternative 20-color palette based on the Glasbey method can be used.
 
 The Glasbey palette is not intended to automatically replace Okabe–Ito at a fixed number of categories. The choice between the palettes should depend on the chart type, visibility against the background, and the need for clear distinction between categories.
+
+## Glasbey_20 Palette
+
+![Glasbey 20 color palette](images/glasbey_20_palette.png)
 
 ### How the Glasbey Palette Was Developed
 
