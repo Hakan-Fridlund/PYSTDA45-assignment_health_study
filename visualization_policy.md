@@ -11,9 +11,9 @@ The color palette is based primarily on the **colorblind-friendly** Okabe–Ito 
 The original order of the Okabe–Ito palette has been modified to improve the separation between consecutive colors, particularly in grayscale reproduction. The colors should be used in the specified order to preserve these optimizations.
 
 ## Okabe-Ito Customized Palette
-
 ![Okabe-Ito color palette](images/okabe_ito_palette.png)
-
+Alternative okabe_ito_tritanopi palette with customized order optimized for tritanopi.
+![Okabe-Ito color palette](images/okabe_ito_tritanopi.png)
 ## General Considerations
 
 The following principles guide the design of all visualizations:
