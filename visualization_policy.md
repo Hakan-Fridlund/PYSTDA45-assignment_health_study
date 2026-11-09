@@ -12,8 +12,7 @@ The original order of the Okabe–Ito palette has been modified to improve the s
 
 ## Okabe-Ito Customized Palette
 ![Okabe-Ito color palette](images/okabe_ito_palette.png)
-Alternative okabe_ito_tritanopi palette with customized order optimized for tritanopi.
-![Okabe-Ito color palette](images/okabe_ito_tritanopi.png)
+
 ## General Considerations
 
 The following principles guide the design of all visualizations:
