@@ -12,9 +12,9 @@ import matplotlib.pyplot as plt
 # custom order for my okabe_ito palette (for white background) optimized order for greyscale
 okabe_ito = ['#0072B2','#E69F00','#009E73','#56B4E9','#D55E00','#CC79A7','#F0E442','#000000']
 # custom ordered glasbey for 20 colors. optimized for white background, greyscale and color blindness
-glasbey_20 = ['#CC0036', '#0094D4', '#28540C', '#6660FC', '#600C84','#A20C60', '#905038', '#049084', '#D86C3C'
-              , '#9678C0','#F6548A', '#0000EA', '#593500', '#08008A', '#967800','#0C42C0', '#843C84', '#D08404',
-                '#781E36', '#00A864']
+glasbey_20 = ['#CC0036','#0994D4','#28540C','#6660FC','#600C84','#A20C60',
+    '#905038','#049084','#D86C3C','#0000EA','#9678C0','#593500','#F6548A',
+    '#08008A','#978700','#006A9C','#843C84','#D08404','#781E36','#0A8640']
 
 
 sns.set_theme(
