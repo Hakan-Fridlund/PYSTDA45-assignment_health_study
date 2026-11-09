@@ -81,3 +81,5 @@ For black-and-white printing, and whenever color separation is insufficient, add
   https://jfly.uni-koeln.de/color/
 * World Wide Web Consortium (W3C). *Web Content Accessibility Guidelines (WCAG) 2.1 – Success Criterion 1.4.11: Non-text Contrast*.  
   https://www.w3.org/TR/WCAG21/#non-text-contrast
+* Glasbey, C. A., van der Heijden, G., Toh, V. F. K., & Gray, A. (2007). *Colour displays for categorical images*. Colour Research & Application, 32(4), 304–309.
+**Author manuscript (PDF):** https://strathprints.strath.ac.uk/30312/1/colorpaper_2006.pdf
