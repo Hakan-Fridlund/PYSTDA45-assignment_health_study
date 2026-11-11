@@ -2,15 +2,15 @@
 
 ## Overview
 
-This project is an individual data analysis assignment based on a health study dataset. The goal is to investigate relationships between demographic characteristics, health measurements, lifestyle factors, and disease prevalence using Python.
+This project is an individual data analysis assignment for the course PYSTDA45, Data Science programme based on a simulated health study dataset. The goal is to investigate relationships between demographic characteristics, health measurements, lifestyle factors, and disease prevalence using Python.
 
-The analysis is performed using Python and presented in Jupyter Notebooks, combining statistical calculations, simulations, hypothesis testing, data visualization, and object-oriented programming.
-
-The project is divided into two parts, each developed and submitted through a separate Git branch.
+The analysis is performed using Python and presented in Jupyter Notebooks, combining statistical calculations, simulations, hypothesis testing, data visualization, and object-oriented programming.  
+The report text is written in Swedish.  
+The project is divided into two parts, each developed and submitted through a separate Git branch.  
 
 ## Dataset
 
-The project uses `health_study_dataset.csv`, containing health-related information about study participants.
+The project uses `health_study_dataset.csv`, a simulated dataset with 800 study participants.
 
 | **Column** | **Description** | **Unit / Values** |
 |---|---|---|
@@ -44,6 +44,15 @@ Additional advanced analysis:
 - Comparing confidence intervals calculated using two different methods.
 - Simulating statistical power to investigate the reliability of the hypothesis test.
 - Justifying statistical methods using documentation and relevant references.
+
+#### Key findings (Part 1)
+
+- Age correlates with both systolic blood pressure (r ≈ 0.61) and cholesterol (r ≈ 0.49).
+- 95 % confidence interval for mean systolic blood pressure: approx. 148.3–150.1 mmHg. The normal approximation and bootstrap give nearly identical results.
+- No significant difference in mean systolic blood pressure between smokers and non-smokers (Welch's t-test, p ≈ 0.65).
+- The power simulation shows low power for detecting the observed difference (about 0.5 mmHg), even at large sample sizes.
+- Disease is more common among smokers than non-smokers in the dataset (8.9 % vs 4.8 %). This was not tested statistically and is recommended for further investigation.
+
 
 ### Part 2 – Advanced Analysis and Pipeline
 
