@@ -185,13 +185,10 @@ Part 2:
 git checkout del2
 ```
 
-Start Jupyter Notebook:
+Open the desired .ipynb file in the notebooks directory in Visual Studio Code.  
 
-```bash
-jupyter notebook
-```
+Ensure that the Python and Jupyter extensions are installed and select the appropriate Python interpreter and kernel before running the notebook.  
 
-Run the notebook cells sequentially to reproduce the analysis, statistical calculations, simulations, and visualizations.
 
 ## Reproducibility
 
