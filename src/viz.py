@@ -195,6 +195,3 @@ def plot_chol_bp_corr(df: pd.DataFrame, palette: list[str]) -> sns.FacetGrid:
     plt.show()
 
     return g
-
-
-
