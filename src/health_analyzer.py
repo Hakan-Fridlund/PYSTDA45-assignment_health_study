@@ -38,7 +38,6 @@ class HealthAnalyzer():
         """
         return metrics.summary_statistics(self.df)
 
-# TODO add column names in swedish for output
     def correlation_matrix(self, method: str = 'pearson') -> pd.DataFrame:
         """
         Calculate the correlation matrix for the numeric columns.
@@ -49,9 +48,10 @@ class HealthAnalyzer():
             Square DataFrame with correlation coefficients between all
             numeric columns.
         """
+
         return metrics.correlation_matrix(self.df, method=method)
 
-
+       
 
 
 

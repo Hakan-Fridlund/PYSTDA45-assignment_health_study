@@ -39,4 +39,14 @@ def correlation_matrix(df: pd.DataFrame, method: str = 'pearson') -> pd.DataFram
         Square DataFrame with correlation coefficients between all
         numeric columns.
     """
-    return df.select_dtypes(include='number').corr(method=method)
+
+    swedish = {'age': 'Ålder',
+            'sex': 'Kön',
+            'weight': 'Vikt',
+            'height': 'Längd',
+            'systolic_bp': 'Blodtryck',
+            'cholesterol': 'Kolesterol',
+            'smoker': 'Rökare',
+            'disease': 'Sjukdom',
+            'bmi': 'BMI'}
+    return df.select_dtypes(include='number').corr(method=method).rename(index=swedish, columns=swedish)
