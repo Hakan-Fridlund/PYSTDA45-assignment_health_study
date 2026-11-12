@@ -87,3 +87,44 @@ def age_by_sex(df: pd.DataFrame) -> pd.DataFrame:
             index={0: 'Kvinna', 1: 'Man'})
         .rename_axis('Kön')
         .round(1))
+
+def smoker_share(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Calculate descriptive smoker share grouped by sex.
+    Args:
+        df: DataFrame containing the health study data (columns 'sex' and 'smoker').
+    Returns:
+        DataFrame of 2x2 rows, show percentages of smoker status.
+      
+    """
+    smoker_share = pd.crosstab(df['sex'], df['smoker'], normalize='index') * 100
+
+    smoker_share = smoker_share.rename(
+    index={0: 'Kvinna', 1: 'Man'},
+    columns={0: 'Nej', 1: 'Ja'}).rename_axis(
+        index='Kön', columns='Rökare')
+    return smoker_share.round(1)
+
+def chol_bp_corr(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Calculate the correlation between cholesterol and systolic blood pressure
+    separately for women and men.
+    Args:
+        df: DataFrame containing 'sex', 'systolic_bp' and 'cholesterol'.
+    Returns:
+        DataFrame containing the correlation coefficient for each sex.
+    """
+    corr = (
+        df.groupby('sex')[['cholesterol', 'systolic_bp']]
+        .corr()
+        .iloc[[1, 3], 0]
+        .droplevel(1)
+        .rename(index={0: 'Kvinna', 1: 'Man'})
+        .rename('Korrelation (r)'))
+    
+    corr.index.name = 'Kön'
+
+    return corr.to_frame().round(3)
+
+
+    

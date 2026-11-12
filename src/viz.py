@@ -25,12 +25,15 @@ PALETTES: dict[str, list[str]] = {'okabe_ito': okabe_ito,
     'okabe_ito_tritanopi': okabe_ito_tritanopi, 
     'glasbey_20': glasbey_20,}
 
+# To set histogram figsizes, recommended on histplots
+HIST_FIGSIZE = (6.5, 5.5)
+
 sns.set_theme(
     style='whitegrid',
     palette=okabe_ito,
     font='DejaVu Sans'
 )
-# SEABORN - For these diagram types saturation needs to be set to 1 (since standard=0.75)
+# SEABORN - For these diagram types saturation needs to be manually set to 1 (since standard=0.75)
 # sns.barplot() /sns.countplot() / sns.boxplot() / sns.violinplot()	/ sns.boxenplot()
 
 plt.rcParams['figure.facecolor'] = 'white'
@@ -96,10 +99,11 @@ def plot_dodged_distribution(df: pd.DataFrame, palette: list[str]) -> plt.Axes:
     data = df.assign(Kön=df['sex'].map({0: 'Kvinna', 1: 'Man'}))
     sex_labels = {0: 'Kvinna', 1: 'Man'}
 
-    _, ax = plt.subplots()
+    _, ax = plt.subplots(figsize=(HIST_FIGSIZE))
     sns.histplot(data=data, x='age', hue='Kön', multiple='dodge', shrink=1.0,
                  kde=True, palette=palette[:2], ax=ax, alpha = 0.8, bins = 15)
-    # old legend needed to build combination legend
+    
+    # old legend needed to build new combined legend
     handles = ax.get_legend().legend_handles
 
     mean_age = df['age'].mean()
@@ -113,4 +117,84 @@ def plot_dodged_distribution(df: pd.DataFrame, palette: list[str]) -> plt.Axes:
     ax.set_xlabel('Ålder')
     ax.set_ylabel('Antal')
     plt.tight_layout()
+    plt.show()
     return ax
+
+def plot_bp_hist(df: pd.DataFrame, palette: list[str]) -> plt.Axes:
+    """
+    Plot the systolic bloodpressure distribution as histogram with a KDE.
+    Args:
+        df: DataFrame containing the column 'systolic_bp'
+        palette: used for selecting the first color in palette list
+    Returns:
+        The Axes containing the histogram.
+    """
+   
+    _, ax = plt.subplots(figsize=(HIST_FIGSIZE))
+    sns.histplot(data=df, x='systolic_bp', kde=True, color=palette[0], ax=ax, alpha = 0.8, bins = 15)
+
+    ax.set_title('Fördelning av systoliskt blodtryck')
+    ax.set_xlabel('Systoliskt blodtryck (mmHg)')
+    ax.set_ylabel('Antal')
+    plt.tight_layout()
+    plt.show()
+    return ax
+
+
+def plot_smokers_by_sex(df: pd.DataFrame, palette: list[str]) -> plt.Axes:
+    """
+    Plot the number of smokers by sex countplot.
+        Args:
+            df: DataFrame containing the column 'smoker' and 'sex'
+            palette: Colours for the two groups.
+        Returns:
+            The Axes containing the histogram.
+    """
+
+    _, ax = plt.subplots()
+    sns.countplot(data=df, x='smoker', hue='sex', palette=palette[:2], saturation=1, edgecolor='black')
+
+    ax.set_title('Antal rökare fördelat på kön')
+    ax.set_xlabel('Rökare')
+    ax.set_ylabel('Antal')
+
+    ax.set_xticks([0, 1])
+    ax.set_xticklabels(['Nej', 'Ja'])
+
+    ax.legend_.set_title('Sex')
+    ax.legend_.texts[0].set_text('Kvinna')
+    ax.legend_.texts[1].set_text('Man')
+    plt.tight_layout()
+    plt.show()
+    return ax
+
+def plot_chol_bp_corr(df: pd.DataFrame, palette: list[str]) -> sns.FacetGrid:
+    """
+    Plot the relationship between cholesterol and systolic blood pressure,
+    with separate regression lines for each sex.
+    Args:
+        df: DataFrame containing cholesterol, systolic_bp and sex columns.
+        Sex is encoded as 0 (Female) and 1 (Male).
+        palette : Color palette containing at least two colors.
+    Returns:
+        Seaborn FacetGrid containing the scatter plot and regression lines.
+    """
+
+    g = sns.lmplot(data=df, x='cholesterol', y='systolic_bp', hue='sex', palette=palette[:2],
+        markers=['o', 'h'], height=6, aspect=1.5, scatter_kws={'alpha': 0.6}, ci=95, n_boot=5000, seed=42)
+
+    g.set_axis_labels('Kolesterol (mmol/L)', 'Systoliskt blodtryck (mmHg)')
+    g.figure.suptitle('Kolesterol i förhållande till systoliskt blodtryck', y=1.02)
+
+    g.legend.set_title('Kön')
+    g.legend.texts[0].set_text('Kvinna')
+    g.legend.texts[1].set_text('Man')
+
+    g.ax.grid(alpha=0.3)
+    g.figure.tight_layout()
+    plt.show()
+
+    return g
+
+
+

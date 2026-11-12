@@ -6,6 +6,8 @@ and visualizations through modular components as a wrapper class.
 """
 from pathlib import Path
 import pandas as pd
+import matplotlib as plt
+import seaborn as sns
 from . import data_utils, metrics, viz
 
 
@@ -42,7 +44,6 @@ class HealthAnalyzer():
         """
         Calculate the correlation matrix for the numeric columns.
         Args:
-            df: DataFrame containing the health study data.
             method: Correlation method: 'pearson', 'spearman' or 'kendall'.
         Returns:
             Square DataFrame with correlation coefficients between all
@@ -54,8 +55,6 @@ class HealthAnalyzer():
     def disease_share(self) -> pd.Series:
         """
         Calculate the share of disease prevalence.
-        Args:
-            df: DataFrame containing the health study data.
         Returns:
             Series with the percentage of participants per group, indexed by
             'Ingen sjukdom' and 'Sjukdom'. Values are rounded.
@@ -70,10 +69,42 @@ class HealthAnalyzer():
         """
         return metrics.age_by_sex(self.df)
 
+    def smoker_share(self) -> pd.DataFrame:
+        """
+        Calculate descriptive smoker share grouped by sex.
+        Returns:
+            DataFrame of 2x2 rows, show percentages of smoker status.
+        """
+        return metrics.smoker_share(self.df)
 
-    def plot_dodged_distribution(self):
-        """Plot the age distribution by sex (see plots)."""
+    def chol_bp_corr(self) -> pd.DataFrame:
+        """
+        Calculate correlation of systolic_bp and cholesterol.
+        Returns:
+            DataFrame of systolic_bp and cholesterol corr, per sex
+        """
+        return metrics.chol_bp_corr(self.df)
+
+
+
+    def plot_dodged_distribution(self) -> plt.Axes:
+        """Plot the age distribution by sex with kde (see viz)."""
         return viz.plot_dodged_distribution(self.df, viz.PALETTES[self.palette])
+
+    def plot_bp_hist(self) -> plt.Axes:
+        """Plot the systolic bloodpressure histogram plot with kde (see viz)."""
+        return viz.plot_bp_hist(self.df, viz.PALETTES[self.palette])
+        
+    def plot_smokers_by_sex(self) -> plt.Axes:
+        """Plot smokers divided by sex as countplot (see viz)."""
+        return viz.plot_smokers_by_sex(self.df, viz.PALETTES[self.palette])
+
+    def plot_chol_bp_corr(self) -> sns.FacetGrid:
+        """Plot the scatterplot with correlation between cholesterol and systolic bloodpressure,
+        by sex with separate regressionlines."""
+        return viz.plot_chol_bp_corr(self.df, viz.PALETTES[self.palette])
+
+
 
 if __name__ == "__main__":
 
