@@ -7,6 +7,7 @@ No custom plotting functions are defined in Part 1.
 """
 import seaborn as sns
 import matplotlib.pyplot as plt
+import pandas as pd
 
 
 # custom order for my okabe_ito palette (for white background) optimized order for greyscale
@@ -20,6 +21,9 @@ glasbey_20 = ['#CC0036','#0994D4','#28540C','#6660FC','#600C84','#A20C60',
     '#905038','#049084','#D86C3C','#0000EA','#9678C0','#593500','#F6548A',
     '#08008A','#978700','#006A9C','#843C84','#D08404','#781E36','#0A8640']
 
+PALETTES: dict[str, list[str]] = {'okabe_ito': okabe_ito,
+    'okabe_ito_tritanopi': okabe_ito_tritanopi, 
+    'glasbey_20': glasbey_20,}
 
 sns.set_theme(
     style='whitegrid',
@@ -76,3 +80,37 @@ plt.rcParams['figure.dpi'] = 120
 plt.rcParams['savefig.dpi'] = 300
 plt.rcParams['savefig.bbox'] = 'tight'
 plt.rcParams['savefig.facecolor'] = 'white'
+
+
+def plot_dodged_distribution(df: pd.DataFrame, palette: list[str]) -> plt.Axes:
+    """
+    Plot the age distribution by sex as side-by-side histograms with a KDE.
+    Args:
+        df: DataFrame containing the columns 'age' and 'sex' (coded 0/1).
+        palette: Colours for the two groups (first colour for women,
+            second for men).
+
+    Returns:
+        The Axes containing the histogram.
+    """
+    data = df.assign(Kön=df['sex'].map({0: 'Kvinna', 1: 'Man'}))
+    sex_labels = {0: 'Kvinna', 1: 'Man'}
+
+    _, ax = plt.subplots()
+    sns.histplot(data=data, x='age', hue='Kön', multiple='dodge', shrink=1.0,
+                 kde=True, palette=palette[:2], ax=ax, alpha = 0.8, bins = 15)
+    # old legend needed to build combination legend
+    handles = ax.get_legend().legend_handles
+
+    mean_age = df['age'].mean()
+    mean_line = ax.axvline(mean_age, color='black', linestyle='--',
+                           linewidth=3, label=f'Total (medel: {mean_age:.1f} år)')
+
+    ax.legend(handles + [mean_line], [*sex_labels.values(), mean_line.get_label()],
+              title='Kön')
+    
+    ax.set_title('Åldersfördelning efter kön')
+    ax.set_xlabel('Ålder')
+    ax.set_ylabel('Antal')
+    plt.tight_layout()
+    return ax

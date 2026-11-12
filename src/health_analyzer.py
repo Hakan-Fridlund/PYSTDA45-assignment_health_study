@@ -6,7 +6,7 @@ and visualizations through modular components as a wrapper class.
 """
 from pathlib import Path
 import pandas as pd
-from . import data_utils, metrics
+from . import data_utils, metrics, viz
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -51,10 +51,29 @@ class HealthAnalyzer():
 
         return metrics.correlation_matrix(self.df, method=method)
 
-       
+    def disease_share(self) -> pd.Series:
+        """
+        Calculate the share of disease prevalence.
+        Args:
+            df: DataFrame containing the health study data.
+        Returns:
+            Series with the percentage of participants per group, indexed by
+            'Ingen sjukdom' and 'Sjukdom'. Values are rounded.
+        """
+        return metrics.disease_share(self.df)
+
+    def age_by_sex(self) -> pd.DataFrame:
+        """
+        Calculate descriptive statistics for age, grouped by sex.
+        Returns:
+            DataFrame with one row per sex. Values are rounded to one decimal.
+        """
+        return metrics.age_by_sex(self.df)
 
 
-
+    def plot_dodged_distribution(self):
+        """Plot the age distribution by sex (see plots)."""
+        return viz.plot_dodged_distribution(self.df, viz.PALETTES[self.palette])
 
 if __name__ == "__main__":
 

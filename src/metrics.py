@@ -50,3 +50,40 @@ def correlation_matrix(df: pd.DataFrame, method: str = 'pearson') -> pd.DataFram
             'disease': 'Sjukdom',
             'bmi': 'BMI'}
     return df.select_dtypes(include='number').corr(method=method).rename(index=swedish, columns=swedish)
+
+
+def disease_share(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Calculate the share of disease prevalence.
+    Args:
+        df: DataFrame containing the health study data.
+    Returns:
+        Series with the percentage of participants per group, indexed by
+        'Ingen sjukdom' and 'Sjukdom'. Values are rounded.
+    """
+    return ((df['disease'].map({0: 'Ingen sjukdom', 1: 'Sjukdom'})
+         .value_counts(normalize=True)* 100)
+        .round(2)
+        .rename('Andel (%)')
+        .rename_axis('Sjukdomsstatus')
+        .to_frame())
+
+def age_by_sex(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Calculate descriptive statistics for age, grouped by sex.
+    Args:
+        df: DataFrame containing the health study data (columns 'sex' and 'age').
+    Returns:
+        DataFrame with one row per sex and the columns 'Medelvärde',
+        'Median', 'Standardavvikelse' and 'Antal'. 
+        Values are rounded to one decimal.
+    """
+    return (df.groupby('sex')['age']
+        .agg(['mean', 'median', 'std', 'count'])
+        .rename(columns={'mean': 'Medelvärde',
+            'median': 'Median',
+            'std': 'Standardavvikelse',
+            'count': 'Antal',},
+            index={0: 'Kvinna', 1: 'Man'})
+        .rename_axis('Kön')
+        .round(1))
