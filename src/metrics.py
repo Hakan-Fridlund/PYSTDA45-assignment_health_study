@@ -3,6 +3,8 @@ Module for calculating health study data.
 """
 
 import pandas as pd
+import numpy as np
+from scipy.stats import norm
 
 
 def summary_statistics(df: pd.DataFrame) -> pd.DataFrame:
@@ -175,5 +177,127 @@ def disease_probability(df: pd.Dataframe, population_size: int = 1000) -> pd.Dat
         'Sannolikhet för ingen sjukdom:',
         'Simulerad population (antal individer):',
         'Förväntat antal individer med sjukdom:'])
+
+    return summary
+
+def simulate_disease_prevalence(df: pd.DataFrame, population_size: int = 1000, seed: int = 0) -> pd.DataFrame:
+    """
+    Simulate disease prevalence in a population based on observed prevalence.
+    ARgs:
+        DataFrame: containing the binary 'disease' column.
+        population_size : int, default=1000
+            Number of individuals in the simulated population.
+        seed : int, default=0
+            Random seed for reproducibility.
+    Returns:
+        DataFrame Table comparing simulated and observed disease prevalence,
+        including the absolute difference.
+    """
+    disease_probability = df['disease'].mean()
+
+    rng = np.random.default_rng(seed)
+    simulated_population = rng.choice([0, 1], size=population_size, p=[1 - disease_probability, disease_probability])
+
+    simulated_prevalence = simulated_population.mean()
+    difference = abs(disease_probability - simulated_prevalence)
+
+    summary = pd.DataFrame({'Värde': [
+            f'{simulated_prevalence:.2%}',
+            f'{disease_probability:.2%}',
+            f'{difference:.2%}']}, 
+            index=[
+        'Simulerad sjukdomsförekomst',
+        'Observerad sjukdomsförekomst',
+        'Skillnad'])
+
+    return summary
+
+def blood_pressure_summary(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Calculate mean and sample standard deviation of systolic blood pressure.
+    Args:
+        DataFrame containing the 'systolic_bp' column.
+    Returns:
+            Summary table with mean and standard deviation in mmHg.
+    """
+    systolic_mean = df['systolic_bp'].mean()
+    systolic_std = df['systolic_bp'].std(ddof=1)
+
+    summary = pd.DataFrame({'Värde': [round(systolic_mean, 2), round(systolic_std, 2)]}
+                           , index=['Medelvärde för observerat systoliskt blodtryck (mmHg):', 
+                                'Standardavvikelse för observerat systoliskt blodtryck (mmHg):'])
+
+    return summary
+
+def blood_pressure_confidence_interval(df: pd.DataFrame, confidence_level: float = 0.95) -> pd.DataFrame:
+    """
+    Calculate a confidence interval for the mean systolic blood pressure
+    using the normal approximation.
+    Args:
+        DataFrame: containing the 'systolic_bp' column.
+        confidence_level: float, default=0.95 for the interval.
+    Returns:
+        DataFrame Table containing the lower and upper confidence limits and the confidence interval.
+    """
+    systolic_mean = df['systolic_bp'].mean()
+    systolic_std = df['systolic_bp'].std(ddof=1)
+    n = df['systolic_bp'].count()
+
+    if not 0 < confidence_level < 1:
+        raise ValueError("confidence_level must be between 0 and 1.")
+    if n < 2:
+        raise ValueError("At least two valid observations are required.")
+
+    z = norm.ppf(1 - (1 - confidence_level) / 2)
+
+    standard_error = systolic_std / np.sqrt(n)
+    margin_of_error = z * standard_error
+
+    ci_lower = systolic_mean - margin_of_error
+    ci_upper = systolic_mean + margin_of_error
+
+    summary = pd.DataFrame({'Värde': [
+            round(ci_lower, 2),
+            round(ci_upper, 2),]},
+            index=['Nedre gräns konfidensintervall (mmHg)',
+                'Övre gräns konfidensintervall (mmHg)'])
+
+    return summary
+
+def blood_pressure_bootstrap_ci(df: pd.DataFrame, confidence_level: float = 0.95, n_bootstrap: int = 10_000, seed: int = 0) -> pd.DataFrame:
+    """
+    Calculate a bootstrap confidence interval for mean systolic blood pressure.
+    Args:
+        DataFrame: containing the 'systolic_bp' column.
+        confidence_level: Confidence level, default=0.95.
+        n_bootstrap: Number of bootstrap resamples, default=10,000.
+        seed: Random seed for reproducibility, default=0.
+    Returns:
+        DataFrame containing the lower and upper confidence limits.
+    """
+    data = df['systolic_bp'].dropna()
+    n = len(data)
+
+    if not 0 < confidence_level < 1:
+        raise ValueError("confidence_level must be between 0 and 1.")
+    if n_bootstrap < 1:
+        raise ValueError("n_bootstrap must be at least 1.")
+    if n < 2:
+        raise ValueError("At least two valid observations are required.")
+
+    rng = np.random.default_rng(seed)
+    bootstrap_means = []
+
+    for _ in range(n_bootstrap):
+        sample = rng.choice(data, size=n, replace=True)
+        bootstrap_means.append(sample.mean())
+
+    alpha = 1 - confidence_level
+    ci_lower = np.percentile(bootstrap_means, alpha / 2 * 100)
+    ci_upper = np.percentile(bootstrap_means, (1 - alpha / 2) * 100)
+
+    summary = pd.DataFrame({'Värde': [round(ci_lower, 2), round(ci_upper, 2)]}, 
+                           index=['Nedre gräns bootstrap-konfidensintervall (mmHg)',
+                            'Övre gräns bootstrap-konfidensintervall (mmHg)'])
 
     return summary

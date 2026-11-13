@@ -13,8 +13,10 @@ import pandas as pd
 # custom order for my okabe_ito palette (for white background) optimized order for greyscale
 okabe_ito = ['#0072B2','#E69F00','#009E73','#56B4E9','#D55E00','#CC79A7','#F0E442','#000000']
 
-# another order of okabe_ito I optimized for tritanopi, best order overall, but not my favourite first 2 color pair
-okabe_ito_tritanopi = ['#009E73','#E69F00','#0072B2','#CC79A7','#56B4E9','#D55E00','#F0E442','#000000']
+# another order of okabe_ito I optimized for tritanopi, 
+# best order overall, but not my favourite first 2 color pair
+okabe_ito_tritanopi = ['#009E73','#E69F00','#0072B2','#CC79A7'
+                       ,'#56B4E9','#D55E00','#F0E442','#000000']
 
 # custom ordered glasbey for 20 colors. optimized for white background, greyscale and color blindness
 glasbey_20 = ['#CC0036','#0994D4','#28540C','#6660FC','#600C84','#A20C60',
@@ -101,8 +103,8 @@ def plot_dodged_distribution(df: pd.DataFrame, palette: list[str]) -> plt.Axes:
 
     _, ax = plt.subplots(figsize=(HIST_FIGSIZE))
     sns.histplot(data=data, x='age', hue='Kön', multiple='dodge', shrink=1.0,
-                 kde=True, palette=palette[:2], ax=ax, alpha = 0.8, bins = 15)
-    
+                kde=True, palette=palette[:2], ax=ax, alpha = 0.8, bins = 15)
+
     # old legend needed to build new combined legend
     handles = ax.get_legend().legend_handles
 
@@ -112,7 +114,7 @@ def plot_dodged_distribution(df: pd.DataFrame, palette: list[str]) -> plt.Axes:
 
     ax.legend(handles + [mean_line], [*sex_labels.values(), mean_line.get_label()],
               title='Kön')
-    
+
     ax.set_title('Åldersfördelning efter kön')
     ax.set_xlabel('Ålder')
     ax.set_ylabel('Antal')
@@ -129,7 +131,7 @@ def plot_bp_hist(df: pd.DataFrame, palette: list[str]) -> plt.Axes:
     Returns:
         The Axes containing the histogram.
     """
-   
+
     _, ax = plt.subplots(figsize=(HIST_FIGSIZE))
     sns.histplot(data=df, x='systolic_bp', kde=True, color=palette[0], ax=ax, alpha = 0.8, bins = 15)
 
@@ -212,7 +214,7 @@ def plot_bp_by_disease(df: pd.DataFrame, palette: list[str]) -> plt.Axes:
                 1: f'Sjukdom (antal: {disease_counts.get(1, 0)})'}
 
     fig, ax = plt.subplots()
-    sns.boxplot(data=df, x='disease', y='systolic_bp', hue='disease', palette=palette[:2], 
+    sns.boxplot(data=df, x='disease', y='systolic_bp', hue='disease', palette=palette[:2],
                 legend=False, order=[0, 1], width=0.6, saturation=1, ax=ax)
 
     sns.swarmplot(data=df, x='disease', y='systolic_bp', color='black', alpha=0.3, size=4,

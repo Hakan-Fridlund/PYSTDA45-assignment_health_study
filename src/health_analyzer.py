@@ -92,7 +92,23 @@ class HealthAnalyzer():
         """Calculate share of disease in population (default to: 1000)"""
         return metrics.disease_probability(self.df, population_size)
 
-    
+    def simulate_disease_prevalence(self, population_size: int = 1000, seed: int = 0) -> pd.DataFrame:
+        """Simulate disease prevalence and compare it with observed prevalence."""
+        return metrics.simulate_disease_prevalence(self.df, population_size, seed)
+
+    def blood_pressure_summary(self) -> pd.DataFrame:
+        """Return summary statistics for systolic blood pressure."""
+        return metrics.blood_pressure_summary(self.df)
+
+    def blood_pressure_confidence_interval(self, confidence_level: float = 0.95) -> pd.DataFrame:
+        """Return confidence interval for mean systolic blood pressure."""
+        return metrics.blood_pressure_confidence_interval(self.df, confidence_level)
+
+    def blood_pressure_bootstrap_ci(self, confidence_level: float = 0.95, n_bootstrap: int = 10_000, seed: int = 0) -> pd.DataFrame:
+        """Return bootstrap confidence interval for mean systolic blood pressure."""
+        return metrics.blood_pressure_bootstrap_ci(self.df, confidence_level, n_bootstrap, seed)
+
+
 
     def plot_dodged_distribution(self) -> plt.Axes:
         """Plot the age distribution by sex with kde (see viz)."""
@@ -101,7 +117,7 @@ class HealthAnalyzer():
     def plot_bp_hist(self) -> plt.Axes:
         """Plot the systolic bloodpressure histogram plot with kde (see viz)."""
         return viz.plot_bp_hist(self.df, viz.PALETTES[self.palette])
-        
+
     def plot_smokers_by_sex(self) -> plt.Axes:
         """Plot smokers divided by sex as countplot (see viz)."""
         return viz.plot_smokers_by_sex(self.df, viz.PALETTES[self.palette])
@@ -111,18 +127,18 @@ class HealthAnalyzer():
         by sex with separate regressionlines."""
         return viz.plot_chol_bp_corr(self.df, viz.PALETTES[self.palette])
 
-    def plot_bp_by_disease(self) -> Axes:
+    def plot_bp_by_disease(self) -> plt.Axes:
         """Plot systolic blood pressure distribution by disease status, combined box/swarmplot"""
         return viz.plot_bp_by_disease(self.df, viz.PALETTES[self.palette])
 
-    def plot_chol_by_disease(self) -> Axes:
+    def plot_chol_by_disease(self) -> plt.Axes:
         """Plot cholesterol distribution by disease status, combined box/swarmplot"""
         return viz.plot_chol_by_disease(self.df, viz.PALETTES[self.palette])
 
-    def plot_age_by_disease(self) -> Axes:
+    def plot_age_by_disease(self) -> plt.Axes:
         """Plot age distribution by disease status, combined box/swarmplot"""
         return viz.plot_age_by_disease(self.df, viz.PALETTES[self.palette])
 
-    def plot_smoking_by_disease(self) -> Axes:
+    def plot_smoking_by_disease(self) -> plt.Axes:
         """Plot smoking proportions by disease status, stacked boxplot"""
         return viz.plot_smoking_by_disease(self.df, viz.PALETTES[self.palette])
