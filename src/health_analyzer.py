@@ -104,21 +104,18 @@ class HealthAnalyzer():
         by sex with separate regressionlines."""
         return viz.plot_chol_bp_corr(self.df, viz.PALETTES[self.palette])
 
+    def plot_bp_by_disease(self) -> Axes:
+        """Plot systolic blood pressure distribution by disease status, combined box/swarmplot"""
+        return viz.plot_bp_by_disease(self.df, viz.PALETTES[self.palette])
 
+    def plot_chol_by_disease(self) -> Axes:
+        """Plot cholesterol distribution by disease status, combined box/swarmplot"""
+        return viz.plot_chol_by_disease(self.df, viz.PALETTES[self.palette])
 
-if __name__ == "__main__":
+    def plot_age_by_disease(self) -> Axes:
+        """Plot age distribution by disease status, combined box/swarmplot"""
+        return viz.plot_age_by_disease(self.df, viz.PALETTES[self.palette])
 
-    analyzer = HealthAnalyzer(path=DATA_PATH)
-
-    print("\n--- DataFrame head ---")
-    print(analyzer.df.head())
-
-    print("\n--- Descriptive statistics ---")
-    print(analyzer.df.describe())
-
-    analyzer.df.info()
-    print('\nMissing Values:\n', analyzer.df.isna().sum())
-    print('\nduplicates:', analyzer.df.duplicated().sum())
-
-    print(analyzer.df['sex'].unique())
-    print(analyzer.df['smoker'].unique())
+    def plot_smoking_by_disease(self) -> Axes:
+        """Plot smoking proportions by disease status, stacked boxplot"""
+        return viz.plot_smoking_by_disease(self.df, viz.PALETTES[self.palette])

@@ -195,3 +195,132 @@ def plot_chol_bp_corr(df: pd.DataFrame, palette: list[str]) -> sns.FacetGrid:
     plt.show()
 
     return g
+
+def plot_bp_by_disease(df: pd.DataFrame, palette: list[str]) -> plt.Axes:
+    """
+    Plot the distribution of systolic blood pressure by disease status
+    using a boxplot and overlaid swarmplot.
+    The number of observations in each disease group is included in the x-axis labels.
+    Args:
+        df: DataFrame containing 'disease' and 'systolic_bp' columns.
+        Disease status is encoded as 0 (No disease) and 1 (Disease).
+        palette : Color palette containing at least two colors.
+    Returns: Matplotlib Axes containing the boxplot and swarmplot.
+    """
+    disease_counts = df['disease'].value_counts()
+    labels = {0: f'Ingen sjukdom (antal: {disease_counts.get(0, 0)})',
+                1: f'Sjukdom (antal: {disease_counts.get(1, 0)})'}
+
+    fig, ax = plt.subplots()
+    sns.boxplot(data=df, x='disease', y='systolic_bp', hue='disease', palette=palette[:2], 
+                legend=False, order=[0, 1], width=0.6, saturation=1, ax=ax)
+
+    sns.swarmplot(data=df, x='disease', y='systolic_bp', color='black', alpha=0.3, size=4,
+        order=[0, 1], ax=ax)
+
+    ax.set_title('Systoliskt blodtrycksfördelning efter sjukdomsstatus')
+    ax.set_xlabel('Sjukdomsstatus')
+    ax.set_ylabel('Systoliskt blodtryck (mmHg)')
+    ax.set_xticks([0, 1], labels=[labels[0], labels[1]])
+
+    fig.tight_layout()
+    plt.show()
+    return ax
+
+def plot_chol_by_disease(df: pd.DataFrame, palette: list[str]) -> plt.Axes:
+    """
+    Plot the distribution of cholesterol by disease status
+    using a boxplot and overlaid swarmplot.
+    The number of observations in each disease group is included in the x-axis labels.
+    Args:
+        df: DataFrame containing 'disease' and 'cholesterol' columns.
+        Disease status is encoded as 0 (No disease) and 1 (Disease).
+        palette : Color palette containing at least two colors.
+    Returns: Matplotlib Axes containing the boxplot and swarmplot.
+    """
+    disease_counts = df['disease'].value_counts()
+    labels = {0: f'Ingen sjukdom (antal: {disease_counts.get(0, 0)})',
+                1: f'Sjukdom (antal: {disease_counts.get(1, 0)})'}
+
+    fig, ax = plt.subplots()
+    sns.boxplot(data=df, x='disease', y='cholesterol', hue='disease', palette=palette[:2], 
+                legend=False, order=[0, 1], width=0.6, saturation=1, ax=ax)
+
+    sns.swarmplot(data=df, x='disease', y='cholesterol', color='black', alpha=0.3, size=4,
+        order=[0, 1], ax=ax)
+
+    ax.set_title('Fördelning av kolesterol efter sjukdomsstatus')
+    ax.set_xlabel('Sjukdomsstatus')
+    ax.set_ylabel('Kolesterol (mmol/L)')
+    ax.set_xticks([0, 1], labels=[labels[0], labels[1]])
+
+    fig.tight_layout()
+    plt.show()
+    return ax
+
+
+def plot_age_by_disease(df: pd.DataFrame, palette: list[str]) -> plt.Axes:
+    """
+    Plot the distribution of age by disease status
+    using a boxplot and overlaid swarmplot.
+    The number of observations in each disease group is included in the x-axis labels.
+    Args:
+        df: DataFrame containing 'disease' and 'age' columns.
+        Disease status is encoded as 0 (No disease) and 1 (Disease).
+        palette : Color palette containing at least two colors.
+    Returns: Matplotlib Axes containing the boxplot and swarmplot.
+    """
+    disease_counts = df['disease'].value_counts()
+    labels = {0: f'Ingen sjukdom (antal: {disease_counts.get(0, 0)})',
+                1: f'Sjukdom (antal: {disease_counts.get(1, 0)})'}
+
+    fig, ax = plt.subplots()
+    sns.boxplot(data=df, x='disease', y='age', hue='disease', palette=palette[:2], 
+                legend=False, order=[0, 1], width=0.6, saturation=1, ax=ax)
+
+    sns.swarmplot(data=df, x='disease', y='age', color='black', alpha=0.3, size=4,
+        order=[0, 1], ax=ax)
+
+    ax.set_title('Åldersfördelning efter sjukdomsstatus')
+    ax.set_xlabel('Sjukdomsstatus')
+    ax.set_ylabel('Ålder (år)')
+    ax.set_xticks([0, 1], labels=[labels[0], labels[1]])
+
+    fig.tight_layout()
+    plt.show()
+    return ax
+
+
+def plot_smoking_by_disease(df: pd.DataFrame, palette: Sequence[str]) -> Axes:
+    """
+    Plot the proportion of smokers and non-smokers by disease status
+    using a stacked bar chart.
+    The number of observations in each disease group is included in the x-axis labels.
+    ARgs: 
+        DataFrame: containing 'disease' and 'smoker' columns.
+        (Disease and smoking status are encoded as 0 and 1.)
+        palette: Color palette containing at least two colors.
+    Returns:
+        Matplotlib Axes containing the stacked bar chart.
+    """
+    smoker_proportion = (pd.crosstab(df['disease'], df['smoker'], normalize='index')
+        .reindex(index=[0, 1], columns=[0, 1], fill_value=0) * 100)
+
+    disease_counts = df['disease'].value_counts()
+
+    labels = [f'Ingen sjukdom (n={disease_counts.get(0, 0)})', f'Sjukdom (n={disease_counts.get(1, 0)})']
+    smoker_proportion.index = labels
+
+    ax = smoker_proportion.plot(kind='bar', stacked=True, color=[palette[0], palette[1]], edgecolor='black', alpha=1)
+
+    ax.set_title('Rökstatus efter sjukdomsförekomst')
+    ax.set_xlabel('Sjukdomsstatus')
+    ax.set_ylabel('Andel deltagare (%)')
+    ax.set_ylim(0, 110)
+    ax.legend(['Icke-rökare', 'Rökare'], title='Rökstatus')
+
+    ax.tick_params(axis='x', rotation=0)
+    ax.figure.tight_layout()
+    plt.show()
+
+    return ax
