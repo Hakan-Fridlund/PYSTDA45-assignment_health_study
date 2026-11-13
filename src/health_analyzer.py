@@ -49,7 +49,6 @@ class HealthAnalyzer():
             Square DataFrame with correlation coefficients between all
             numeric columns.
         """
-
         return metrics.correlation_matrix(self.df, method=method)
 
     def disease_share(self) -> pd.Series:
@@ -85,7 +84,15 @@ class HealthAnalyzer():
         """
         return metrics.chol_bp_corr(self.df)
 
+    def smoker_disease_distribution(self) -> pd.DataFrame:
+        """Calculate disease distribution among smokers and non-smokers."""
+        return metrics.smoker_disease_distribution(self.df)
 
+    def disease_probability(self, population_size: int = 1000) -> pd.Dataframe:
+        """Calculate share of disease in population (default to: 1000)"""
+        return metrics.disease_probability(self.df, population_size)
+
+    
 
     def plot_dodged_distribution(self) -> plt.Axes:
         """Plot the age distribution by sex with kde (see viz)."""

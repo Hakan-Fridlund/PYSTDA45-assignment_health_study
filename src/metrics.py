@@ -126,5 +126,54 @@ def chol_bp_corr(df: pd.DataFrame) -> pd.DataFrame:
 
     return corr.to_frame().round(3)
 
+def smoker_disease_distribution(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Calculate the percentage distribution of disease status
+    among smokers and non-smokers.
+    Args:
+        DataFrame: containing the 'smoker' and 'disease' columns
+        Both variables are binary encoded as 0 and 1.
+    Returns:
+        DataFrame with Percentage distribution of disease status by smoking status.
+        Rows represent smoking status and columns represent disease status.
+    """
+    smoker_risk = pd.crosstab(df['smoker'], df['disease'], normalize='index') * 100
 
-    
+    smoker_risk = smoker_risk.reindex(index=[0, 1], columns=[0, 1], fill_value=0)
+
+    smoker_risk = smoker_risk.rename(
+        index={0: 'Icke-rökare', 1: 'Rökare'},
+        columns={0: 'Ingen sjukdom', 1: 'Sjukdom'}).rename_axis(
+            index='Rökstatus', columns='Sjukdomsstatus')
+
+    return smoker_risk.round(1)
+
+def disease_probability(df: pd.Dataframe, population_size: int = 1000) -> pd.DataFrame:
+    """ 
+    Calculates the mean disease, since encoded as 0 and 1,
+    the mean represent the share in % and other keyvalues for disease probability.
+    Args:
+        DataFrame: containing 'disease' column.
+    Returns:
+        Dataframe with keyvalues for disease probability.
+    """
+    probability = df['disease'].mean()
+    no_disease_probability = 1 - probability
+    expected_cases = probability * population_size
+
+    summary = pd.DataFrame({
+        'Värde': [
+            f'{probability:.2%}',
+            f'{probability:.4f}',
+            f'{no_disease_probability:.4f}',
+            population_size,
+            round(expected_cases)
+        ]
+    }, index=[
+        'Observerad sjukdomsförekomst:',
+        'Sannolikhet för sjukdom:',
+        'Sannolikhet för ingen sjukdom:',
+        'Simulerad population (antal individer):',
+        'Förväntat antal individer med sjukdom:'])
+
+    return summary
