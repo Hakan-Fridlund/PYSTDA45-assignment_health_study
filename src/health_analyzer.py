@@ -34,53 +34,36 @@ class HealthAnalyzer():
     def summary_statistics(self) -> pd.DataFrame:
         """
         Calculate mean, median, minimum and maximum for the study measurements.
-        Returns:
-            DataFrame with one row per measurement and the columns
-            'Mean', 'Median', 'Min' and 'Max'. Values are rounded to 2 decimals.
         """
         return metrics.summary_statistics(self.df)
 
     def correlation_matrix(self, method: str = 'pearson') -> pd.DataFrame:
         """
         Calculate the correlation matrix for the numeric columns.
-        Args:
-            method: Correlation method: 'pearson', 'spearman' or 'kendall'.
-        Returns:
-            Square DataFrame with correlation coefficients between all
-            numeric columns.
         """
         return metrics.correlation_matrix(self.df, method=method)
 
     def disease_share(self) -> pd.Series:
         """
         Calculate the share of disease prevalence.
-        Returns:
-            Series with the percentage of participants per group, indexed by
-            'Ingen sjukdom' and 'Sjukdom'. Values are rounded.
         """
         return metrics.disease_share(self.df)
 
     def age_by_sex(self) -> pd.DataFrame:
         """
         Calculate descriptive statistics for age, grouped by sex.
-        Returns:
-            DataFrame with one row per sex. Values are rounded to one decimal.
         """
         return metrics.age_by_sex(self.df)
 
     def smoker_share(self) -> pd.DataFrame:
         """
         Calculate descriptive smoker share grouped by sex.
-        Returns:
-            DataFrame of 2x2 rows, show percentages of smoker status.
         """
         return metrics.smoker_share(self.df)
 
     def chol_bp_corr(self) -> pd.DataFrame:
         """
         Calculate correlation of systolic_bp and cholesterol.
-        Returns:
-            DataFrame of systolic_bp and cholesterol corr, per sex
         """
         return metrics.chol_bp_corr(self.df)
 
