@@ -14,14 +14,15 @@ from matplotlib.axes import Axes
 # custom order for my okabe_ito palette (for white background) optimized order for greyscale
 okabe_ito = ['#0072B2','#E69F00','#009E73','#56B4E9','#D55E00','#CC79A7','#F0E442','#000000']
 
-# another order of okabe_ito I optimized for tritanopi, 
+# another order of okabe_ito I optimized for tritanopi,
 # best order overall, but not my favourite first 2 color pair
 okabe_ito_tritanopi = ['#009E73','#E69F00','#0072B2','#CC79A7'
                        ,'#56B4E9','#D55E00','#F0E442','#000000']
 
-# custom ordered glasbey for 20 colors. optimized for white background, greyscale and color blindness
-glasbey_20 = ["#CC0036","#0994D4","#28540C","#600C84","#A20C60","#6660FC","#905038","#049084","#D86C3C", "#0000EA",
-              "#9678C0","#593500","#F6548A","#08008A","#978700","#006A9C","#843C84","#D08404","#781E36","#0A8640",]
+#custom ordered glasbey for 20 colors. optimized for white background, greyscale and color blindness
+glasbey_20 = ["#CC0036","#0994D4","#28540C","#600C84","#A20C60","#6660FC","#905038","#049084",
+              "#D86C3C", "#0000EA","#9678C0","#593500","#F6548A","#08008A","#978700","#006A9C",
+              "#843C84","#D08404","#781E36","#0A8640",]
 
 PALETTES: dict[str, list[str]] = {'okabe_ito': okabe_ito,
     'okabe_ito_tritanopi': okabe_ito_tritanopi, 
@@ -101,7 +102,7 @@ def plot_dodged_distribution(df: pd.DataFrame, palette: list[str]) -> Axes:
     data = df.assign(Kön=df['sex'].map({0: 'Kvinna', 1: 'Man'}))
     sex_labels = {0: 'Kvinna', 1: 'Man'}
 
-    _, ax = plt.subplots(figsize=(HIST_FIGSIZE))
+    _, ax = plt.subplots(figsize=HIST_FIGSIZE)
     sns.histplot(data=data, x='age', hue='Kön', multiple='dodge', shrink=1.0,
                 kde=True, palette=palette[:2], ax=ax, alpha = 0.8, bins = 15)
 
@@ -132,8 +133,8 @@ def plot_bp_hist(df: pd.DataFrame, palette: list[str]) -> Axes:
         The Axes containing the histogram.
     """
 
-    _, ax = plt.subplots(figsize=(HIST_FIGSIZE))
-    sns.histplot(data=df, x='systolic_bp', kde=True, color=palette[0], ax=ax, alpha = 0.8, bins = 15)
+    _, ax = plt.subplots(figsize=HIST_FIGSIZE)
+    sns.histplot(data=df, x='systolic_bp', kde=True, color=palette[0], ax=ax,alpha = 0.8, bins = 15)
 
     ax.set_title('Fördelning av systoliskt blodtryck')
     ax.set_xlabel('Systoliskt blodtryck (mmHg)')
@@ -154,7 +155,8 @@ def plot_smokers_by_sex(df: pd.DataFrame, palette: list[str]) -> Axes:
     """
 
     _, ax = plt.subplots()
-    sns.countplot(data=df, x='smoker', hue='sex', palette=palette[:2], saturation=1, edgecolor='black')
+    sns.countplot(data=df, x='smoker', hue='sex', palette=palette[:2],
+                  saturation=1, edgecolor='black')
 
     ax.set_title('Antal rökare fördelat på kön')
     ax.set_xlabel('Rökare')
@@ -183,7 +185,8 @@ def plot_chol_bp_corr(df: pd.DataFrame, palette: list[str]) -> sns.FacetGrid:
     """
 
     g = sns.lmplot(data=df, x='cholesterol', y='systolic_bp', hue='sex', palette=palette[:2],
-        markers=['o', 'h'], height=6, aspect=1.5, scatter_kws={'alpha': 0.6}, ci=95, n_boot=5000, seed=42)
+                   markers=['o', 'h'],height=6, aspect=1.5, scatter_kws={'alpha': 0.6}, ci=95,
+                   n_boot=5000, seed=42)
 
     g.set_axis_labels('Kolesterol (mmol/L)', 'Systoliskt blodtryck (mmHg)')
     g.figure.suptitle('Kolesterol i förhållande till systoliskt blodtryck', y=1.02)
@@ -245,7 +248,7 @@ def plot_chol_by_disease(df: pd.DataFrame, palette: list[str]) -> Axes:
                 1: f'Sjukdom (antal: {disease_counts.get(1, 0)})'}
 
     fig, ax = plt.subplots()
-    sns.boxplot(data=df, x='disease', y='cholesterol', hue='disease', palette=palette[:2], 
+    sns.boxplot(data=df, x='disease', y='cholesterol', hue='disease', palette=palette[:2],
                 legend=False, order=[0, 1], width=0.6, saturation=1, ax=ax)
 
     sns.swarmplot(data=df, x='disease', y='cholesterol', color='black', alpha=0.3, size=4,
@@ -277,7 +280,7 @@ def plot_age_by_disease(df: pd.DataFrame, palette: list[str]) -> Axes:
                 1: f'Sjukdom (antal: {disease_counts.get(1, 0)})'}
 
     fig, ax = plt.subplots()
-    sns.boxplot(data=df, x='disease', y='age', hue='disease', palette=palette[:2], 
+    sns.boxplot(data=df, x='disease', y='age', hue='disease', palette=palette[:2],
                 legend=False, order=[0, 1], width=0.6, saturation=1, ax=ax)
 
     sns.swarmplot(data=df, x='disease', y='age', color='black', alpha=0.3, size=4,
@@ -293,7 +296,7 @@ def plot_age_by_disease(df: pd.DataFrame, palette: list[str]) -> Axes:
     return ax
 
 
-def plot_smoking_by_disease(df: pd.DataFrame, palette: Sequence[str]) -> Axes:
+def plot_smoking_by_disease(df: pd.DataFrame, palette: list[str]) -> Axes:
     """
     Plot the proportion of smokers and non-smokers by disease status
     using a stacked bar chart.
@@ -310,10 +313,12 @@ def plot_smoking_by_disease(df: pd.DataFrame, palette: Sequence[str]) -> Axes:
 
     disease_counts = df['disease'].value_counts()
 
-    labels = [f'Ingen sjukdom (n={disease_counts.get(0, 0)})', f'Sjukdom (n={disease_counts.get(1, 0)})']
+    labels = [f'Ingen sjukdom (n={disease_counts.get(0, 0)})',
+               f'Sjukdom (n={disease_counts.get(1, 0)})']
     smoker_proportion.index = labels
 
-    ax = smoker_proportion.plot(kind='bar', stacked=True, color=[palette[0], palette[1]], edgecolor='black', alpha=1)
+    ax = smoker_proportion.plot(kind='bar', stacked=True, color=[palette[0], palette[1]],
+                                edgecolor='black', alpha=1)
 
     ax.set_title('Rökstatus efter sjukdomsförekomst')
     ax.set_xlabel('Sjukdomsstatus')
@@ -328,7 +333,7 @@ def plot_smoking_by_disease(df: pd.DataFrame, palette: Sequence[str]) -> Axes:
     return ax
 
 
-def plot_power_simulation(results: pd.DataFrame, palette: Sequence[str]) -> Axes:
+def plot_power_simulation(results: pd.DataFrame, palette: list[str]) -> Axes:
     """
     Plot estimated statistical power against total sample size.
     Args:
