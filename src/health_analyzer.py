@@ -8,6 +8,7 @@ from pathlib import Path
 import pandas as pd
 import matplotlib as plt
 import seaborn as sns
+from scipy.stats import ttest_ind
 from . import data_utils, metrics, viz
 
 
@@ -90,6 +91,12 @@ class HealthAnalyzer():
     def blood_pressure_bootstrap_ci(self, confidence_level: float = 0.95, n_bootstrap: int = 10_000, seed: int = 0) -> pd.DataFrame:
         """Return bootstrap confidence interval for mean systolic blood pressure."""
         return metrics.blood_pressure_bootstrap_ci(self.df, confidence_level, n_bootstrap, seed)
+
+    def smoking_blood_pressure_stats(self) -> pd.DataFrame:
+        """Return descriptive blood pressure statistics by smoking status."""
+        return metrics.smoking_blood_pressure_stats(self.df)
+
+    
 
 
 

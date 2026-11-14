@@ -206,9 +206,9 @@ def simulate_disease_prevalence(df: pd.DataFrame, population_size: int = 1000, s
             f'{disease_probability:.2%}',
             f'{difference:.2%}']}, 
             index=[
-        'Simulerad sjukdomsförekomst',
-        'Observerad sjukdomsförekomst',
-        'Skillnad'])
+        'Simulerad sjukdomsförekomst:',
+        'Observerad sjukdomsförekomst:',
+        'Skillnad:'])
 
     return summary
 
@@ -259,8 +259,8 @@ def blood_pressure_confidence_interval(df: pd.DataFrame, confidence_level: float
     summary = pd.DataFrame({'Värde': [
             round(ci_lower, 2),
             round(ci_upper, 2),]},
-            index=['Nedre gräns konfidensintervall (mmHg)',
-                'Övre gräns konfidensintervall (mmHg)'])
+            index=['Nedre gräns konfidensintervall (mmHg):',
+                'Övre gräns konfidensintervall (mmHg):'])
 
     return summary
 
@@ -297,7 +297,30 @@ def blood_pressure_bootstrap_ci(df: pd.DataFrame, confidence_level: float = 0.95
     ci_upper = np.percentile(bootstrap_means, (1 - alpha / 2) * 100)
 
     summary = pd.DataFrame({'Värde': [round(ci_lower, 2), round(ci_upper, 2)]}, 
-                           index=['Nedre gräns bootstrap-konfidensintervall (mmHg)',
-                            'Övre gräns bootstrap-konfidensintervall (mmHg)'])
+                           index=['Nedre gräns bootstrap-konfidensintervall (mmHg):',
+                            'Övre gräns bootstrap-konfidensintervall (mmHg):'])
 
     return summary
+
+
+def smoking_blood_pressure_stats(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Calculate descriptive statistics for systolic blood pressure
+    grouped by smoking status.
+    Args:
+        DataFrame: containing 'smoker' and 'systolic_bp' columns.
+            Smoker is coded as 0 (non-smoker) and 1 (smoker).
+    Returns:
+        DataFrame: containing count, mean and standard deviation
+            of systolic blood pressure by smoking status.
+    """
+    smoking_stats = (df.groupby('smoker', observed=True)['systolic_bp']
+                     .agg(['count', 'mean', 'std']).round(2))
+
+    smoking_stats = smoking_stats.rename(
+        index={0: 'Icke-rökare', 1: 'Rökare'},
+        columns={'count': 'Antal',
+            'mean': 'Medelvärde (mmHg)',
+            'std': 'Standardavvikelse (mmHg)'}).rename_axis('Rökstatus')
+
+    return smoking_stats
