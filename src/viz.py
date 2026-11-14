@@ -20,9 +20,8 @@ okabe_ito_tritanopi = ['#009E73','#E69F00','#0072B2','#CC79A7'
                        ,'#56B4E9','#D55E00','#F0E442','#000000']
 
 # custom ordered glasbey for 20 colors. optimized for white background, greyscale and color blindness
-glasbey_20 = ['#CC0036','#0994D4','#28540C','#6660FC','#600C84','#A20C60',
-    '#905038','#049084','#D86C3C','#0000EA','#9678C0','#593500','#F6548A',
-    '#08008A','#978700','#006A9C','#843C84','#D08404','#781E36','#0A8640']
+glasbey_20 = ["#CC0036","#0994D4","#28540C","#600C84","#A20C60","#6660FC","#905038","#049084","#D86C3C", "#0000EA",
+              "#9678C0","#593500","#F6548A","#08008A","#978700","#006A9C","#843C84","#D08404","#781E36","#0A8640",]
 
 PALETTES: dict[str, list[str]] = {'okabe_ito': okabe_ito,
     'okabe_ito_tritanopi': okabe_ito_tritanopi, 
