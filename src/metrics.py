@@ -19,11 +19,12 @@ def summary_statistics(df: pd.DataFrame) -> pd.DataFrame:
         systolic_bp, cholesterol) and the columns 'Mean', 'Median',
         'Min' and 'Max'. rounded to 2 decimals.
     """
-    columns = {'age': 'Ålder', 
-               'weight': 'Vikt (kg)',
-                'height': 'Längd (cm)',
-                'systolic_bp': 'Systoliskt blodtryck (mmHg)',
-                'cholesterol': 'Kolesterol (mmol/L)'}
+    columns = {'age': 'Ålder:', 
+               'weight': 'Vikt (kg):',
+                'height': 'Längd (cm):',
+                'bmi': 'BMI:',
+                'systolic_bp': 'Systoliskt blodtryck (mmHg):',
+                'cholesterol': 'Kolesterol (mmol/L):'}
 
     return (df[list(columns)].agg(['mean', 'median', 'min', 'max']).T
                 .rename(index=columns,
