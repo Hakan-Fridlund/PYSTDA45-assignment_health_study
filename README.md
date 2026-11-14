@@ -132,7 +132,7 @@ git clone https://github.com/Hakan-Fridlund/PYSTDA45-assignment_health_study.git
 **2. Navigate to the project directory:**
 
 ```bash
-cd health-study
+cd PYSTDA45-assignment_health_study
 ```
 
 **3. Create a virtual environment:**
