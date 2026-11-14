@@ -96,6 +96,9 @@ health-study/
 ├── data/
 │   └── health_study_dataset.csv
 │
+├── images/
+│   └──okabe_ito_palette.png
+│
 ├── notebooks/
 │   ├── health_study_part1.ipynb
 │   └── health_study_part2.ipynb
@@ -103,15 +106,14 @@ health-study/
 ├── src/
 │   ├── __init__.py
 │   └── health_analyzer.py
-│
-├── tests/
-│   └── ...
+│   └── data_utils.py
+│   └── metrics.py
+│   └── viz.py
 │
 ├── README.md
 └── requirements.txt
+└── visualization_ploicy.md
 ```
-
-*Note: The structure may evolve as the project develops.*
 
 ## Getting Started
 
