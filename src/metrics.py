@@ -5,7 +5,9 @@ Module for calculating health study data.
 import pandas as pd
 import numpy as np
 from scipy.stats import norm
-
+from scipy.stats import ttest_ind
+from scipy import stats
+from functools import partial
 
 def summary_statistics(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -324,3 +326,84 @@ def smoking_blood_pressure_stats(df: pd.DataFrame) -> pd.DataFrame:
             'std': 'Standardavvikelse (mmHg)'}).rename_axis('Rökstatus')
 
     return smoking_stats
+
+
+
+def welch_ttest_smoking_blood_pressure(df: pd.DataFrame, alternative: str = 'two-sided') -> pd.DataFrame:
+    """
+    Perform Welch's t-test to compare mean systolic blood pressure
+    between smokers and non-smokers.
+    Args:
+        DataFrame: containing 'smoker' and 'systolic_bp' columns.
+            Smoker is coded as 0 (non-smoker) and 1 (smoker).
+        alternative: Alternative hypothesis. Options are 'two-sided',
+            'greater' or 'less'. Default is 'two-sided'.
+    Returns:
+        DataFrame: containing the t-statistic and p-value.
+    """
+    if alternative not in ['two-sided', 'less', 'greater']:
+        raise ValueError("alternative must be 'two-sided', 'less' or 'greater'.")
+
+    smokers = df.loc[df['smoker'] == 1, 'systolic_bp'].dropna()
+
+    non_smokers = df.loc[df['smoker'] == 0, 'systolic_bp'].dropna()
+
+    t_stat, p_value = ttest_ind(smokers, non_smokers, equal_var=False, alternative=alternative)
+
+    summary = pd.DataFrame({'Värde': [round(t_stat, 4),f'{p_value:.6g}',alternative]}, 
+                           index=['t-värde:', 'p-värde:', 'Testalternativ:'])
+
+    return summary
+
+
+
+def power_simulation(df: pd.DataFrame, n_simulations: int = 5000, alpha: float = 0.05, seed: int = 0) -> pd.DataFrame:
+    """
+    Simulate statistical power for Welch's t-test at different sample sizes, 
+    comparing systolic blood pressure between smokers and non-smokers.
+    Args:
+        - DataFrame: containing 'smoker' and 'systolic_bp'.
+        - n_simulations: Number of simulations per sample size.
+        - alpha: Significance level. Defaults to 0.05.
+        - seed: Random seed for reproducibility. Defaults to 0.
+    Returns:
+        - DataFrame: containing sample sizes and estimated power.
+    """
+    if not 0 < alpha < 1:
+        raise ValueError("alpha must be between 0 and 1.")
+
+    smokers = df.loc[df['smoker'] == 1, 'systolic_bp'].dropna()
+
+    non_smokers = df.loc[df['smoker'] == 0, 'systolic_bp'].dropna()
+
+    mean_smokers = smokers.mean()
+    mean_non_smokers = non_smokers.mean()
+    std_smokers = smokers.std(ddof=1)
+    std_non_smokers = non_smokers.std(ddof=1)
+
+    sample_sizes = np.array([100, 250, 500, 1000, 2000, 3000, 5000, 7500, 10000, 15000, 20000, 25000, 30000, 35000])
+
+    smoker_ratio = len(smokers) / (len(smokers)+len(non_smokers))
+    sample_sizes_smokers = np.rint(sample_sizes * smoker_ratio).astype(int)
+    sample_sizes_non_smokers = (sample_sizes - sample_sizes_smokers)
+    rng = np.random.default_rng(seed)
+
+    welch_test = lambda x, y: ttest_ind(x, y, equal_var=False, alternative='two-sided').pvalue
+
+    generate_smokers = partial(rng.normal, loc=mean_smokers, scale=std_smokers)
+    generate_non_smokers = partial(rng.normal, loc=mean_non_smokers, scale=std_non_smokers)
+
+    power_result = stats.power(test=welch_test, rvs=(generate_non_smokers, generate_smokers),
+        n_observations=(sample_sizes_non_smokers, sample_sizes_smokers),
+        significance=alpha,
+        n_resamples=n_simulations,
+        vectorized=False)
+
+    results = pd.DataFrame({
+        'Totalt stickprov': sample_sizes,
+        'Rökare': sample_sizes_smokers,
+        'Icke-rökare': sample_sizes_non_smokers,
+        'Statistisk power (%)': power_result.power * 100})
+
+    return results
+

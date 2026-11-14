@@ -8,6 +8,7 @@ No custom plotting functions are defined in Part 1.
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
+from matplotlib.axes import Axes
 
 
 # custom order for my okabe_ito palette (for white background) optimized order for greyscale
@@ -87,7 +88,7 @@ plt.rcParams['savefig.bbox'] = 'tight'
 plt.rcParams['savefig.facecolor'] = 'white'
 
 
-def plot_dodged_distribution(df: pd.DataFrame, palette: list[str]) -> plt.Axes:
+def plot_dodged_distribution(df: pd.DataFrame, palette: list[str]) -> Axes:
     """
     Plot the age distribution by sex as side-by-side histograms with a KDE.
     Args:
@@ -122,7 +123,7 @@ def plot_dodged_distribution(df: pd.DataFrame, palette: list[str]) -> plt.Axes:
     plt.show()
     return ax
 
-def plot_bp_hist(df: pd.DataFrame, palette: list[str]) -> plt.Axes:
+def plot_bp_hist(df: pd.DataFrame, palette: list[str]) -> Axes:
     """
     Plot the systolic bloodpressure distribution as histogram with a KDE.
     Args:
@@ -143,7 +144,7 @@ def plot_bp_hist(df: pd.DataFrame, palette: list[str]) -> plt.Axes:
     return ax
 
 
-def plot_smokers_by_sex(df: pd.DataFrame, palette: list[str]) -> plt.Axes:
+def plot_smokers_by_sex(df: pd.DataFrame, palette: list[str]) -> Axes:
     """
     Plot the number of smokers by sex countplot.
         Args:
@@ -198,7 +199,7 @@ def plot_chol_bp_corr(df: pd.DataFrame, palette: list[str]) -> sns.FacetGrid:
 
     return g
 
-def plot_bp_by_disease(df: pd.DataFrame, palette: list[str]) -> plt.Axes:
+def plot_bp_by_disease(df: pd.DataFrame, palette: list[str]) -> Axes:
     """
     Plot the distribution of systolic blood pressure by disease status
     using a boxplot and overlaid swarmplot.
@@ -229,7 +230,7 @@ def plot_bp_by_disease(df: pd.DataFrame, palette: list[str]) -> plt.Axes:
     plt.show()
     return ax
 
-def plot_chol_by_disease(df: pd.DataFrame, palette: list[str]) -> plt.Axes:
+def plot_chol_by_disease(df: pd.DataFrame, palette: list[str]) -> Axes:
     """
     Plot the distribution of cholesterol by disease status
     using a boxplot and overlaid swarmplot.
@@ -261,7 +262,7 @@ def plot_chol_by_disease(df: pd.DataFrame, palette: list[str]) -> plt.Axes:
     return ax
 
 
-def plot_age_by_disease(df: pd.DataFrame, palette: list[str]) -> plt.Axes:
+def plot_age_by_disease(df: pd.DataFrame, palette: list[str]) -> Axes:
     """
     Plot the distribution of age by disease status
     using a boxplot and overlaid swarmplot.
@@ -323,6 +324,30 @@ def plot_smoking_by_disease(df: pd.DataFrame, palette: Sequence[str]) -> Axes:
 
     ax.tick_params(axis='x', rotation=0)
     ax.figure.tight_layout()
+    plt.show()
+
+    return ax
+
+
+def plot_power_simulation(results: pd.DataFrame, palette: Sequence[str]) -> Axes:
+    """
+    Plot estimated statistical power against total sample size.
+    Args:
+        results: DataFrame returned by metrics.power_simulation()
+    """
+    fig, ax =plt.subplots()
+    ax.plot(results['Totalt stickprov'], results['Statistisk power (%)'], marker='o',
+                label='Uppskattad statistisk power', color=palette[0])
+
+    ax.axhline(y=80, linestyle='--', label='Målvärde för statistisk power (80 %)', color=palette[1])
+
+    ax.set_xlabel('Totalt antal observationer')
+    ax.set_ylabel('Statistisk power (%)')
+    ax.set_title('Statistisk power vid olika stickprovsstorlekar')
+    ax.set_ylim(0, 100)
+    ax.grid(True, axis='both')
+    ax.legend()
+    fig.tight_layout()
     plt.show()
 
     return ax

@@ -8,7 +8,6 @@ from pathlib import Path
 import pandas as pd
 import matplotlib as plt
 import seaborn as sns
-from scipy.stats import ttest_ind
 from . import data_utils, metrics, viz
 
 
@@ -96,7 +95,13 @@ class HealthAnalyzer():
         """Return descriptive blood pressure statistics by smoking status."""
         return metrics.smoking_blood_pressure_stats(self.df)
 
-    
+    def welch_ttest_smoking_blood_pressure(self, alternative: str = 'two-sided') -> pd.DataFrame:
+        """Perform Welch's t-test for blood pressure by smoking status."""
+        return metrics.welch_ttest_smoking_blood_pressure(self.df, alternative)
+
+    def power_simulation(self, n_simulations: int = 5000, alpha: float = 0.05, seed: int | None = 0) -> pd.DataFrame:
+        """Simulate statistical power for different sample sizes."""
+        return metrics.power_simulation(self.df, n_simulations=n_simulations, alpha=alpha, seed=seed)
 
 
 
@@ -132,3 +137,7 @@ class HealthAnalyzer():
     def plot_smoking_by_disease(self) -> plt.Axes:
         """Plot smoking proportions by disease status, stacked boxplot"""
         return viz.plot_smoking_by_disease(self.df, viz.PALETTES[self.palette])
+
+    def plot_power_simulation(self, results: pd.DataFrame) -> plt.Axes:
+        """Plot statistical power simulation results."""
+        return viz.plot_power_simulation(results, viz.PALETTES[self.palette])
