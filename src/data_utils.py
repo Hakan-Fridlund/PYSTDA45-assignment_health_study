@@ -32,7 +32,12 @@ def clean_data(df:pd.DataFrame  ) -> pd.DataFrame:
 def transform_data(df: pd.DataFrame) -> pd.DataFrame:
     """ 
     Transform the dataframe by setting the ID as index, 
-    encoding categorical variables to binary and calculating bmi"""
+    encoding categorical variables to binary and calculating bmi to column.
+    Args:
+        df: DataFrame containing the raw health study data.
+        Returns:
+            A transformed DataFrame.
+    """
 
     if 'id' not in df.columns:
         raise ValueError("Required column 'id' is missing.")
@@ -61,6 +66,8 @@ def validate_data(df: pd.DataFrame) -> None:
     Validate the transformed health study DataFrame.
     Raises AssertionError for invalid data. 
     Issues warnings for values outside the defined plausibility ranges.
+    Args:
+        df: DataFrame.
     """
 
     assert 'age' in df.columns, 'Missing column: age.'

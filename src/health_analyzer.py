@@ -6,7 +6,7 @@ and visualizations through modular components as a wrapper class.
 """
 from pathlib import Path
 import pandas as pd
-import matplotlib as plt
+import matplotlib.pyplot as plt
 import seaborn as sns
 from . import data_utils, metrics, viz
 
@@ -32,46 +32,34 @@ class HealthAnalyzer():
         data_utils.validate_data(self.df)
 
     def summary_statistics(self) -> pd.DataFrame:
-        """
-        Calculate mean, median, minimum and maximum for the study measurements.
-        """
+        """Calculate mean, median, minimum and maximum for the study measurements."""
         return metrics.summary_statistics(self.df)
 
     def correlation_matrix(self, method: str = 'pearson') -> pd.DataFrame:
-        """
-        Calculate the correlation matrix for the numeric columns.
-        """
+        """Calculate the correlation matrix for the numeric columns."""
         return metrics.correlation_matrix(self.df, method=method)
 
-    def disease_share(self) -> pd.Series:
-        """
-        Calculate the share of disease prevalence.
-        """
+    def disease_share(self) -> pd.DataFrame:
+        """Calculate the share of disease prevalence."""
         return metrics.disease_share(self.df)
 
     def age_by_sex(self) -> pd.DataFrame:
-        """
-        Calculate descriptive statistics for age, grouped by sex.
-        """
+        """Calculate descriptive statistics for age, grouped by sex."""
         return metrics.age_by_sex(self.df)
 
     def smoker_share(self) -> pd.DataFrame:
-        """
-        Calculate descriptive smoker share grouped by sex.
-        """
+        """Calculate descriptive smoker share grouped by sex."""
         return metrics.smoker_share(self.df)
 
     def chol_bp_corr(self) -> pd.DataFrame:
-        """
-        Calculate correlation of systolic_bp and cholesterol.
-        """
+        """Calculate correlation of systolic_bp and cholesterol."""
         return metrics.chol_bp_corr(self.df)
 
     def smoker_disease_distribution(self) -> pd.DataFrame:
         """Calculate disease distribution among smokers and non-smokers."""
         return metrics.smoker_disease_distribution(self.df)
 
-    def disease_probability(self, population_size: int = 1000) -> pd.Dataframe:
+    def disease_probability(self, population_size: int = 1000) -> pd.DataFrame:
         """Calculate share of disease in population (default to: 1000)"""
         return metrics.disease_probability(self.df, population_size)
 

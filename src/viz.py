@@ -1,9 +1,8 @@
 """
-Visualization settings for the Health Study project.
-Defines shared color palettes and global plotting parameters
-to ensure consistent visualizations across the project.
+Visualization settings and plotting functions for the Health Study project.
 
-No custom plotting functions are defined in Part 1.
+Defines shared color palettes, global plotting parameters and
+custom plotting functions used throughout the analysis.
 """
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -151,12 +150,12 @@ def plot_smokers_by_sex(df: pd.DataFrame, palette: list[str]) -> Axes:
             df: DataFrame containing the column 'smoker' and 'sex'
             palette: Colours for the two groups.
         Returns:
-            The Axes containing the histogram.
+            The Axes containing the countplot.
     """
 
     _, ax = plt.subplots()
     sns.countplot(data=df, x='smoker', hue='sex', palette=palette[:2],
-                  saturation=1, edgecolor='black')
+                  saturation=1, edgecolor='black', ax=ax)
 
     ax.set_title('Antal rökare fördelat på kön')
     ax.set_xlabel('Rökare')
@@ -303,11 +302,12 @@ def plot_smoking_by_disease(df: pd.DataFrame, palette: list[str]) -> Axes:
     The number of observations in each disease group is included in the x-axis labels.
     ARgs: 
         DataFrame: containing 'disease' and 'smoker' columns.
-        (Disease and smoking status are encoded as 0 and 1.)
+            (Disease and smoking status are encoded as 0 and 1.)
         palette: Color palette containing at least two colors.
     Returns:
         Matplotlib Axes containing the stacked bar chart.
     """
+    _, ax = plt.subplots()
     smoker_proportion = (pd.crosstab(df['disease'], df['smoker'], normalize='index')
         .reindex(index=[0, 1], columns=[0, 1], fill_value=0) * 100)
 
@@ -317,8 +317,8 @@ def plot_smoking_by_disease(df: pd.DataFrame, palette: list[str]) -> Axes:
                f'Sjukdom (n={disease_counts.get(1, 0)})']
     smoker_proportion.index = labels
 
-    ax = smoker_proportion.plot(kind='bar', stacked=True, color=[palette[0], palette[1]],
-                                edgecolor='black', alpha=1)
+    smoker_proportion.plot(kind='bar', stacked=True, color=[palette[0], palette[1]],
+                                edgecolor='black', alpha=1, ax=ax)
 
     ax.set_title('Rökstatus efter sjukdomsförekomst')
     ax.set_xlabel('Sjukdomsstatus')
@@ -338,6 +338,9 @@ def plot_power_simulation(results: pd.DataFrame, palette: list[str]) -> Axes:
     Plot estimated statistical power against total sample size.
     Args:
         results: DataFrame returned by metrics.power_simulation()
+        palette: Color palette containing at least two colors.
+    Returns:
+        Axes containing the power simulation plot.
     """
     fig, ax =plt.subplots()
     ax.plot(results['Totalt stickprov'], results['Statistisk power (%)'], marker='o',

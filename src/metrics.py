@@ -2,12 +2,12 @@
 Module for calculating health study data.
 """
 
+from functools import partial
 import pandas as pd
 import numpy as np
-from scipy.stats import norm
-from scipy.stats import ttest_ind
+from scipy.stats import norm, ttest_ind
 from scipy import stats
-from functools import partial
+
 
 def summary_statistics(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -15,11 +15,11 @@ def summary_statistics(df: pd.DataFrame) -> pd.DataFrame:
     Args:
         df: DataFrame containing the health study data.
     Returns:
-        DataFrame with one row per measurement (age, weight, height,
+        DataFrame with one row per measurement (age, weight, height, BMI
         systolic_bp, cholesterol) and the columns 'Mean', 'Median',
         'Min' and 'Max'. rounded to 2 decimals.
     """
-    columns = {'age': 'Ålder:', 
+    columns = {'age': 'Ålder:',
                'weight': 'Vikt (kg):',
                 'height': 'Längd (cm):',
                 'bmi': 'BMI:',
@@ -32,7 +32,7 @@ def summary_statistics(df: pd.DataFrame) -> pd.DataFrame:
                          'median': 'Median',
                          'min': 'Min',
                          'max': 'Max'}).round(2))
-                    
+
 
 def correlation_matrix(df: pd.DataFrame, method: str = 'pearson') -> pd.DataFrame:
     """
@@ -54,7 +54,8 @@ def correlation_matrix(df: pd.DataFrame, method: str = 'pearson') -> pd.DataFram
             'smoker': 'Rökare',
             'disease': 'Sjukdom',
             'bmi': 'BMI'}
-    return df.select_dtypes(include='number').corr(method=method).rename(index=swedish, columns=swedish)
+    return df.select_dtypes(include='number').corr(method=method).rename(
+        index=swedish, columns=swedish)
 
 
 def disease_share(df: pd.DataFrame) -> pd.DataFrame:
@@ -63,7 +64,7 @@ def disease_share(df: pd.DataFrame) -> pd.DataFrame:
     Args:
         df: DataFrame containing the health study data.
     Returns:
-        Series with the percentage of participants per group, indexed by
+        DataFrame with the percentage of participants per group, indexed by
         'Ingen sjukdom' and 'Sjukdom'. Values are rounded.
     """
     return ((df['disease'].map({0: 'Ingen sjukdom', 1: 'Sjukdom'})
@@ -97,18 +98,18 @@ def smoker_share(df: pd.DataFrame) -> pd.DataFrame:
     """
     Calculate descriptive smoker share grouped by sex.
     Args:
-        df: DataFrame containing the health study data (columns 'sex' and 'smoker').
+        DataFrame: containing the health study data (columns 'sex' and 'smoker').
     Returns:
-        DataFrame of 2x2 rows, show percentages of smoker status.
+        DataFrame of 2x2, show percentages of smoker status.
       
     """
-    smoker_share = pd.crosstab(df['sex'], df['smoker'], normalize='index') * 100
+    smoker_sh = pd.crosstab(df['sex'], df['smoker'], normalize='index') * 100
 
-    smoker_share = smoker_share.rename(
+    smoker_sh = smoker_sh.rename(
     index={0: 'Kvinna', 1: 'Man'},
     columns={0: 'Nej', 1: 'Ja'}).rename_axis(
         index='Kön', columns='Rökare')
-    return smoker_share.round(1)
+    return smoker_sh.round(1)
 
 def chol_bp_corr(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -126,7 +127,7 @@ def chol_bp_corr(df: pd.DataFrame) -> pd.DataFrame:
         .droplevel(1)
         .rename(index={0: 'Kvinna', 1: 'Man'})
         .rename('Korrelation (r)'))
-    
+
     corr.index.name = 'Kön'
 
     return corr.to_frame().round(3)
@@ -153,10 +154,10 @@ def smoker_disease_distribution(df: pd.DataFrame) -> pd.DataFrame:
 
     return smoker_risk.round(1)
 
-def disease_probability(df: pd.Dataframe, population_size: int = 1000) -> pd.DataFrame:
+def disease_probability(df: pd.DataFrame, population_size: int = 1000) -> pd.DataFrame:
     """ 
-    Calculates the mean disease, since encoded as 0 and 1,
-    the mean represent the share in % and other keyvalues for disease probability.
+    Calculates the mean for disease, the mean represent the share in %, 
+    and other keyvalues for disease probability.
     Args:
         DataFrame: containing 'disease' column.
     Returns:
@@ -196,18 +197,18 @@ def simulate_disease_prevalence(df: pd.DataFrame, population_size: int = 1000, s
         DataFrame Table comparing simulated and observed disease prevalence,
         including the absolute difference.
     """
-    disease_probability = df['disease'].mean()
+    disease_prob = df['disease'].mean()
 
     rng = np.random.default_rng(seed)
-    simulated_population = rng.choice([0, 1], size=population_size, p=[1 - disease_probability, disease_probability])
+    simulated_population = rng.choice([0, 1], size=population_size, p=[1 - disease_prob, disease_prob])
 
     simulated_prevalence = simulated_population.mean()
-    difference = abs(disease_probability - simulated_prevalence)
+    difference = abs(disease_prob - simulated_prevalence)
 
     summary = pd.DataFrame({'Värde': [
             f'{simulated_prevalence:.2%}',
-            f'{disease_probability:.2%}',
-            f'{difference:.2%}']}, 
+            f'{disease_prob:.2%}',
+            f'{difference:.2%}']},
             index=[
         'Simulerad sjukdomsförekomst:',
         'Observerad sjukdomsförekomst:',
@@ -227,7 +228,7 @@ def blood_pressure_summary(df: pd.DataFrame) -> pd.DataFrame:
     systolic_std = df['systolic_bp'].std(ddof=1)
 
     summary = pd.DataFrame({'Värde': [round(systolic_mean, 2), round(systolic_std, 2)]}
-                           , index=['Medelvärde för observerat systoliskt blodtryck (mmHg):', 
+                           , index=['Medelvärde för observerat systoliskt blodtryck (mmHg):',
                                 'Standardavvikelse för observerat systoliskt blodtryck (mmHg):'])
 
     return summary
@@ -240,7 +241,7 @@ def blood_pressure_confidence_interval(df: pd.DataFrame, confidence_level: float
         DataFrame: containing the 'systolic_bp' column.
         confidence_level: float, default=0.95 for the interval.
     Returns:
-        DataFrame Table containing the lower and upper confidence limits and the confidence interval.
+        DataFrame Table containing the lower, upper confidence limits and the confidence interval.
     """
     systolic_mean = df['systolic_bp'].mean()
     systolic_std = df['systolic_bp'].std(ddof=1)
@@ -299,7 +300,7 @@ def blood_pressure_bootstrap_ci(df: pd.DataFrame, confidence_level: float = 0.95
     ci_lower = np.percentile(bootstrap_means, alpha / 2 * 100)
     ci_upper = np.percentile(bootstrap_means, (1 - alpha / 2) * 100)
 
-    summary = pd.DataFrame({'Värde': [round(ci_lower, 2), round(ci_upper, 2)]}, 
+    summary = pd.DataFrame({'Värde': [round(ci_lower, 2), round(ci_upper, 2)]},
                            index=['Nedre gräns bootstrap-konfidensintervall (mmHg):',
                             'Övre gräns bootstrap-konfidensintervall (mmHg):'])
 
@@ -351,7 +352,7 @@ def welch_ttest_smoking_blood_pressure(df: pd.DataFrame, alternative: str = 'two
 
     t_stat, p_value = ttest_ind(smokers, non_smokers, equal_var=False, alternative=alternative)
 
-    summary = pd.DataFrame({'Värde': [round(t_stat, 4),f'{p_value:.6g}',alternative]}, 
+    summary = pd.DataFrame({'Värde': [round(t_stat, 4),f'{p_value:.6g}',alternative]},
                            index=['t-värde:', 'p-värde:', 'Testalternativ:'])
 
     return summary
@@ -362,13 +363,15 @@ def power_simulation(df: pd.DataFrame, n_simulations: int = 5000, alpha: float =
     """
     Simulate statistical power for Welch's t-test at different sample sizes, 
     comparing systolic blood pressure between smokers and non-smokers.
+    The observed group means and standard deviations are used
+    as assumed population parameters for the simulation.
     Args:
-        - DataFrame: containing 'smoker' and 'systolic_bp'.
-        - n_simulations: Number of simulations per sample size.
-        - alpha: Significance level. Defaults to 0.05.
-        - seed: Random seed for reproducibility. Defaults to 0.
+        DataFrame: containing 'smoker' and 'systolic_bp'.
+        n_simulations: Number of simulations per sample size.
+        alpha: Significance level. Defaults to 0.05.
+        seed: Random seed for reproducibility. Defaults to 0.
     Returns:
-        - DataFrame: containing sample sizes and estimated power.
+        DataFrame: containing sample sizes and estimated power.
     """
     if not 0 < alpha < 1:
         raise ValueError("alpha must be between 0 and 1.")
@@ -382,13 +385,15 @@ def power_simulation(df: pd.DataFrame, n_simulations: int = 5000, alpha: float =
     std_smokers = smokers.std(ddof=1)
     std_non_smokers = non_smokers.std(ddof=1)
 
-    sample_sizes = np.array([100, 250, 500, 1000, 2000, 3000, 5000, 7500, 10000, 15000, 20000, 25000, 30000, 35000])
+    sample_sizes = np.array([100, 250, 500, 1000, 2000, 3000, 5000, 7500,
+                              10000, 15000, 20000, 25000, 30000, 35000])
 
     smoker_ratio = len(smokers) / (len(smokers)+len(non_smokers))
     sample_sizes_smokers = np.rint(sample_sizes * smoker_ratio).astype(int)
     sample_sizes_non_smokers = (sample_sizes - sample_sizes_smokers)
     rng = np.random.default_rng(seed)
 
+# Lambda function since small function I prefer this inside another function over nested a funct
     welch_test = lambda x, y: ttest_ind(x, y, equal_var=False, alternative='two-sided').pvalue
 
     generate_smokers = partial(rng.normal, loc=mean_smokers, scale=std_smokers)
@@ -407,4 +412,3 @@ def power_simulation(df: pd.DataFrame, n_simulations: int = 5000, alpha: float =
         'Statistisk power (%)': power_result.power * 100})
 
     return results
-
