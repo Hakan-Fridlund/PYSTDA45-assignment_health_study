@@ -385,7 +385,7 @@ def plot_regression_coefficients(results: dict[str, object], palette: list[str])
 
         ax.errorbar(row["coefficient"],position, xerr=[[row["coefficient"] - row["ci_lower"]],
                     [row["ci_upper"] - row["coefficient"]]],
-                    fmt="o", color=palette[color_index], capsize=4, markersize=7, 
+                    fmt="o", color=palette[color_index], capsize=4, markersize=7,
                     label="Signifikant" if significant.iloc[position] else "Ej signifikant",)
 
     ax.axvline(0, color='black', linestyle="--", linewidth=1)
@@ -439,7 +439,7 @@ def plot_qq_residuals(results: dict[str, object], palette: list[str]) -> Axes:
     """
     fig, ax = plt.subplots()
     sm.qqplot(results["residuals"], line="s", ax=ax, markerfacecolor=palette[2], markeredgecolor=palette[2], alpha=0.5, markersize=7)
-    ax.lines[-1].set_color(palette[7])
+    ax.lines[-1].set_color('black')
     ax.lines[-1].set_linewidth(1)
     ax.lines[-1].set_linestyle("--")
 

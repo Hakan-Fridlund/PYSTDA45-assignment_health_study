@@ -393,7 +393,7 @@ def power_simulation(df: pd.DataFrame, n_simulations: int = 5000, alpha: float =
 
     smoker_ratio = len(smokers) / (len(smokers)+len(non_smokers))
     sample_sizes_smokers = np.rint(sample_sizes * smoker_ratio).astype(int)
-    sample_sizes_non_smokers = (sample_sizes - sample_sizes_smokers)
+    sample_sizes_non_smokers = sample_sizes - sample_sizes_smokers
     rng = np.random.default_rng(seed)
 
 # Lambda function since small function I prefer this inside another function over a nested funct
@@ -467,7 +467,7 @@ def multiple_linear_regression(df: pd.DataFrame) -> dict[str, object]:
         "n_dropped": len(df) - len(data),}
 
 
-def format_regression_results(results: dict[str, Any]) -> tuple[pd.DataFrame, pd.DataFrame]:
+def format_regression_results(results: dict[str, object]) -> tuple[pd.DataFrame, pd.DataFrame]:
     """
     Format multiple linear regression results into Swedish tables.
     Args : 
@@ -497,7 +497,7 @@ def format_regression_results(results: dict[str, Any]) -> tuple[pd.DataFrame, pd
 
     coefficient_table = coefficient_table.round({"Koefficient": 3, "Standardfel": 3,
                         "p-värde": 4, "95 % KI (nedre)": 3, "95 % KI (övre)": 3,}) 
-    
+
     model_summary = pd.DataFrame({"Modellmått": ["R²",
                     "Justerat R²",
                     "Antal observationer",
@@ -510,8 +510,7 @@ def format_regression_results(results: dict[str, Any]) -> tuple[pd.DataFrame, pd
     return coefficient_table, model_summary
 
 
-def calculate_vif(results: dict[str, object]
-) -> pd.DataFrame:
+def calculate_vif(results: dict[str, object]) -> pd.DataFrame:
     """
     Calculate variance inflation factors for regression predictors.
 
