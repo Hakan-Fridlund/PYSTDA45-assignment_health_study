@@ -112,7 +112,7 @@ health-study/
 │
 ├── README.md
 └── requirements.txt
-└── visualization_ploicy.md
+└── visualization_policy.md
 ```
 
 ## Getting Started
