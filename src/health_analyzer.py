@@ -91,6 +91,16 @@ class HealthAnalyzer():
         """Simulate statistical power for different sample sizes."""
         return metrics.power_simulation(self.df, n_simulations=n_simulations, alpha=alpha, seed=seed)
 
+    def multiple_linear_regression(self) -> dict[str, object]:
+        """Run multiple linear regression."""
+        return metrics.multiple_linear_regression(self.df)
+
+    def format_regression_results(self, results: dict[str, object]) -> tuple[pd.DataFrame, pd.DataFrame]:
+        """Format regression results into Swedish tables."""
+        return metrics.format_regression_results(results)
+
+
+
 
 
     def plot_dodged_distribution(self) -> plt.Axes:
@@ -129,3 +139,11 @@ class HealthAnalyzer():
     def plot_power_simulation(self, results: pd.DataFrame) -> plt.Axes:
         """Plot statistical power simulation results."""
         return viz.plot_power_simulation(results, viz.PALETTES[self.palette])
+
+    def plot_regression_coefficients(self, results: dict[str, object]) -> plt.Axes:
+        """Plot regression coefficients with confidence intervals."""
+        return viz.plot_regression_coefficients(results, viz.PALETTES[self.palette])
+
+    def plot_residuals(self, results: dict[str, object]) -> plt.Axes:
+        """Plot residuals against predicted values."""
+        return viz.plot_residuals(results, viz.PALETTES[self.palette])

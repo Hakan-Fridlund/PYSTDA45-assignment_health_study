@@ -7,6 +7,8 @@ import pandas as pd
 import numpy as np
 from scipy.stats import norm, ttest_ind
 from scipy import stats
+import statsmodels.api as sm
+from sklearn.linear_model import LinearRegression
 
 
 def summary_statistics(df: pd.DataFrame) -> pd.DataFrame:
@@ -393,7 +395,7 @@ def power_simulation(df: pd.DataFrame, n_simulations: int = 5000, alpha: float =
     sample_sizes_non_smokers = (sample_sizes - sample_sizes_smokers)
     rng = np.random.default_rng(seed)
 
-# Lambda function since small function I prefer this inside another function over nested a funct
+# Lambda function since small function I prefer this inside another function over a nested funct
     welch_test = lambda x, y: ttest_ind(x, y, equal_var=False, alternative='two-sided').pvalue
 
     generate_smokers = partial(rng.normal, loc=mean_smokers, scale=std_smokers)
@@ -412,3 +414,96 @@ def power_simulation(df: pd.DataFrame, n_simulations: int = 5000, alpha: float =
         'Statistisk power (%)': power_result.power * 100})
 
     return results
+
+
+
+
+def multiple_linear_regression(df: pd.DataFrame) -> dict[str, object]:
+    """
+    Perform multiple linear regression to investigate factors
+    associated with systolic blood pressure.
+    Uses scikit-learn for model training and statsmodels for statistical inference.
+
+    Args:
+        DataFrame: containing the regression variables.
+    Returns:
+        dict: Regression results.
+    """
+    features = ["age", "cholesterol", "bmi", "smoker", "sex"]
+    target = "systolic_bp"
+    data = df[features + [target]].dropna()
+
+    X = data[features]
+    y = data[target]
+
+    model = LinearRegression()
+    model.fit(X, y)
+
+    X_ols = sm.add_constant(X)
+    ols_result = sm.OLS(y, X_ols).fit()
+
+    confidence_intervals = ols_result.conf_int()
+
+    coefficients = pd.DataFrame({"coefficient": ols_result.params,
+                    "std_error": ols_result.bse,
+                    "p_value": ols_result.pvalues,
+                    "ci_lower": confidence_intervals[0],
+                    "ci_upper": confidence_intervals[1],})
+
+    y_pred = pd.Series(model.predict(X), index=y.index)
+    residuals = y - y_pred
+
+    return {"coefficients": coefficients,
+        "r_squared": model.score(X, y),
+        "adjusted_r_squared": ols_result.rsquared_adj,
+        "model": model,
+        "ols_result": ols_result,
+        "X": X,
+        "y": y,
+        "y_pred": y_pred,
+        "residuals": residuals,
+        "n_observations": len(data),
+        "n_dropped": len(df) - len(data),}
+
+
+def format_regression_results(results: dict[str, Any]) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """
+    Format multiple linear regression results into Swedish tables.
+    Args : 
+        dict: Results returned by multiple_linear_regression()
+    Returns:
+    tuple[pd.DataFrame, pd.DataFrame] Coefficient table and model summary in Swedish.
+    """
+    variable_names = {"const": "Konstant",
+            "age": "Ålder",
+            "cholesterol": "Kolesterol",
+            "bmi": "BMI",
+            "smoker": "Rökning",
+            "sex": "Kön",}
+
+    column_names = {"coefficient": "Koefficient",
+        "std_error": "Standardfel",
+        "p_value": "p-värde",
+        "ci_lower": "95 % KI (nedre)",
+        "ci_upper": "95 % KI (övre)",}
+
+    coefficient_table = results["coefficients"].copy()
+
+    coefficient_table = coefficient_table.rename(index=variable_names)
+    coefficient_table = (coefficient_table
+        .rename(columns=column_names)
+        .rename_axis("Variabel"))
+
+    coefficient_table = coefficient_table.round({"Koefficient": 3, "Standardfel": 3,
+                        "p-värde": 4, "95 % KI (nedre)": 3, "95 % KI (övre)": 3,}) 
+    
+    model_summary = pd.DataFrame({"Modellmått": ["R²",
+                    "Justerat R²",
+                    "Antal observationer",
+                    "Bortfallna observationer",],
+        "Värde": [round(results["r_squared"], 4),
+            round(results["adjusted_r_squared"], 4),
+            results["n_observations"],
+            results["n_dropped"],],})
+
+    return coefficient_table, model_summary

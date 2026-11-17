@@ -358,3 +358,70 @@ def plot_power_simulation(results: pd.DataFrame, palette: list[str]) -> Axes:
     plt.show()
 
     return ax
+
+
+def plot_regression_coefficients(results: dict[str, object], palette: list[str]) -> Axes:
+    """
+    Plot regression coefficients with 95% confidence intervals.
+    Args:
+        results: Dictionary returned by metrics.multiple_linear_regression()
+        palette: Color palette containing at least two colors.
+    Returns:
+        Axes containing the regression coefficient plot.
+    """
+    coefficients = results["coefficients"].drop(index="const")
+
+    variable_names = {"age": "Ålder", "cholesterol": "Kolesterol", "bmi": "BMI",
+        "smoker": "Rökning", "sex": "Kön",}
+
+    coefficients = coefficients.rename(index=variable_names)
+    significant = coefficients["p_value"] < 0.05
+
+    fig, ax = plt.subplots()
+
+    for position, (_, row) in enumerate(coefficients.iterrows()):
+        color_index = 0 if significant.iloc[position] else 1
+
+        ax.errorbar(row["coefficient"],position, xerr=[[row["coefficient"] - row["ci_lower"]],
+                    [row["ci_upper"] - row["coefficient"]]],
+                    fmt="o", color=palette[color_index], capsize=4, markersize=7, 
+                    label="Signifikant" if significant.iloc[position] else "Ej signifikant",)
+
+    ax.axvline(0, color='black', linestyle="--", linewidth=1)
+
+    ax.set_yticks(range(len(coefficients)))
+    ax.set_yticklabels(coefficients.index)
+    ax.set_xlabel("Regressionskoefficient")
+    ax.set_title("Regressionskoefficienter med 95 % konfidensintervall")
+    ax.grid(True, axis="x")
+    handles, labels = ax.get_legend_handles_labels()
+    ax.legend(handles[:2], labels[:2],loc="center left", bbox_to_anchor=(1, 0.5))
+
+    fig.tight_layout()
+    plt.show()
+
+    return ax
+
+def plot_residuals(results: dict[str, object], palette: list[str]) -> Axes:
+    """
+    Plot residuals scatter against predicted values.
+    Args:
+        results: Dictionary returned by metrics.multiple_linear_regression()
+        palette: Color palette containing at least one color.
+    Returns:
+        Axes containing the residual plot.
+    """
+    fig, ax = plt.subplots()
+
+    ax.scatter(results["y_pred"], results["residuals"], color=palette[0], alpha=0.4)
+    ax.axhline(0, color='black', linestyle="--", linewidth=1)
+
+    ax.set_xlabel("Modellens beräknade blodtryck")
+    ax.set_ylabel("Residualer")
+    ax.set_title("Residualdiagram (modellens avvikelser från observerade värden)")
+    ax.grid(True)
+
+    fig.tight_layout()
+    plt.show()
+
+    return ax
