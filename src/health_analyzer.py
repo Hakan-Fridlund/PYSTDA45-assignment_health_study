@@ -32,6 +32,7 @@ class HealthAnalyzer():
         self.df = data_utils.transform_data(self.df)
         data_utils.validate_data(self.df)
 
+#-------------------METRICS.PY functions-----------------------------------------
     def summary_statistics(self) -> pd.DataFrame:
         """Calculate mean, median, minimum and maximum for the study measurements."""
         return metrics.summary_statistics(self.df)
@@ -105,7 +106,7 @@ class HealthAnalyzer():
         return metrics.calculate_vif(results)
 
 
-
+#-------------------VIZ.PY functions-----------------------------------------
 
     def plot_dodged_distribution(self) -> plt.Axes:
         """Plot the age distribution by sex with kde (see viz)."""

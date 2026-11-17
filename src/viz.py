@@ -397,7 +397,7 @@ def plot_regression_coefficients(results: dict[str, object], palette: list[str])
     ax.grid(True, axis="x")
     handles, labels = ax.get_legend_handles_labels()
     ax.legend(handles[:2], labels[:2],loc="center left", bbox_to_anchor=(1, 0.5))
-
+    ax.margins(y=0.2)
     fig.tight_layout()
     plt.show()
 
