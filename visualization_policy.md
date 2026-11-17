@@ -68,8 +68,7 @@ The following limitations should be considered when using the Glasbey palette:
 For black-and-white printing, and whenever color separation is insufficient, additional visual identifiers such as line styles, markers, patterns, direct labels, or text identifiers should be used.
 
 # Usage Guidelines
-
-* **Color order:** Colors must be used in the specified list order, from top to bottom, to preserve the optimizations made for color separation, **color vision deficiencies**, and grayscale reproduction.
+* **Color order:** Colors must be selected in the specified palette order, preserving their relative sequence from top to bottom. The selection does not have to start at index 0; it may begin at any index, provided the original order is maintained. This preserves the optimizations for color separation, color vision deficiencies, and grayscale reproduction.
 * **Multiple visual identifiers:** When more than eight series are displayed, color should not be the only means of distinguishing categories. Supplementary identifiers such as markers, line styles, patterns, direct labels, or text identifiers should be used where appropriate.
 * **Consistent palette selection:** If the Glasbey 20 palette is used in one chart within a report, the same palette should be used consistently in all other charts in that report. The same variable or category should retain the same color across all visualizations. This establishes a consistent visual standard and makes comparisons and recognition easier.
 * **Background considerations:** Color visibility should always be assessed against the chart background. Colors that work well on white backgrounds may not be equally suitable on darker or colored backgrounds.
