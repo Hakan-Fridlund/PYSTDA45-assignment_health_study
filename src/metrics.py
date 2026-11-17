@@ -9,6 +9,7 @@ from scipy.stats import norm, ttest_ind
 from scipy import stats
 import statsmodels.api as sm
 from sklearn.linear_model import LinearRegression
+from statsmodels.stats.outliers_influence import variance_inflation_factor
 
 
 def summary_statistics(df: pd.DataFrame) -> pd.DataFrame:
@@ -507,3 +508,28 @@ def format_regression_results(results: dict[str, Any]) -> tuple[pd.DataFrame, pd
             results["n_dropped"],],})
 
     return coefficient_table, model_summary
+
+
+def calculate_vif(results: dict[str, object]
+) -> pd.DataFrame:
+    """
+    Calculate variance inflation factors for regression predictors.
+
+    Args:
+        results: Dictionary returned by multiple_linear_regression().
+
+    Returns:
+        DataFrame containing VIF values for each predictor.
+    """
+    X = results["X"]
+
+    vif_data = pd.DataFrame({"variable": X.columns,
+        "VIF": [variance_inflation_factor(X.values, i)for i in range(X.shape[1])]})
+
+    vif_data = vif_data.replace({"variable": {"age": "Ålder",
+                            "cholesterol": "Kolesterol",
+                            "bmi": "BMI",
+                            "smoker": "Rökning",
+                            "sex": "Kön"}}).rename(columns={"variable": "Variabel"})
+
+    return vif_data

@@ -11,6 +11,7 @@ import seaborn as sns
 from . import data_utils, metrics, viz
 
 
+
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_PATH = PROJECT_ROOT / 'data' / 'health_study_dataset.csv'
 
@@ -99,6 +100,9 @@ class HealthAnalyzer():
         """Format regression results into Swedish tables."""
         return metrics.format_regression_results(results)
 
+    def calculate_vif(self, results: dict[str, object]) -> pd.DataFrame:
+        """Calculate variance inflation factors for regression predictors."""
+        return metrics.calculate_vif(results)
 
 
 
@@ -147,3 +151,7 @@ class HealthAnalyzer():
     def plot_residuals(self, results: dict[str, object]) -> plt.Axes:
         """Plot residuals against predicted values."""
         return viz.plot_residuals(results, viz.PALETTES[self.palette])
+
+    def plot_qq_residuals(self, results: dict[str, object]) -> plt.Axes:
+        """Plot a Q-Q plot to assess the normality of residuals."""
+        return viz.plot_qq_residuals(results, viz.PALETTES[self.palette])

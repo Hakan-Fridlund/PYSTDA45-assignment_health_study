@@ -8,6 +8,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.axes import Axes
+import statsmodels.api as sm
 
 
 # custom order for my okabe_ito palette (for white background) optimized order for greyscale
@@ -413,12 +414,38 @@ def plot_residuals(results: dict[str, object], palette: list[str]) -> Axes:
     """
     fig, ax = plt.subplots()
 
-    ax.scatter(results["y_pred"], results["residuals"], color=palette[0], alpha=0.4)
+    ax.scatter(results["y_pred"], results["residuals"], color=palette[5], alpha=0.6)
     ax.axhline(0, color='black', linestyle="--", linewidth=1)
 
     ax.set_xlabel("Modellens beräknade blodtryck")
     ax.set_ylabel("Residualer")
     ax.set_title("Residualdiagram (modellens avvikelser från observerade värden)")
+    ax.grid(True)
+
+    fig.tight_layout()
+    plt.show()
+
+    return ax
+
+
+def plot_qq_residuals(results: dict[str, object], palette: list[str]) -> Axes:
+    """
+    Plot a Q-Q plot to assess the normality of residuals.
+    Args:
+        results: Dictionary returned by metrics.multiple_linear_regression()
+        palette: Color palette containing at least one color.
+    Returns:
+        Axes containing the Q-Q plot.
+    """
+    fig, ax = plt.subplots()
+    sm.qqplot(results["residuals"], line="s", ax=ax, markerfacecolor=palette[2], markeredgecolor=palette[2], alpha=0.5, markersize=7)
+    ax.lines[-1].set_color(palette[7])
+    ax.lines[-1].set_linewidth(1)
+    ax.lines[-1].set_linestyle("--")
+
+    ax.set_title('Kontroll av residualernas normalfördelning (Q-Q-diagram)')
+    ax.set_xlabel('Förväntade normalvärden')
+    ax.set_ylabel('Sorterade residualer')
     ax.grid(True)
 
     fig.tight_layout()
