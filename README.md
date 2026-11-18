@@ -51,7 +51,7 @@ Additional advanced analysis:
 - 95 % confidence interval for mean systolic blood pressure: approx. 148.3–150.1 mmHg. The normal approximation and bootstrap give nearly identical results.
 - No significant difference in mean systolic blood pressure between smokers and non-smokers (Welch's t-test, p ≈ 0.65).
 - The power simulation shows low power for detecting the observed difference (about 0.5 mmHg), even at large sample sizes.
-- Disease is more common among smokers than non-smokers in the dataset (8.9 % vs 4.8 %). This was not tested statistically and is recommended for further investigation.
+- Disease is more common among smokers than non-smokers in the dataset (8.9 % vs 4.8 %). This was not tested statistically and is recommended for further investigation, this is tested in part 2.
 
 
 ### Part 2 – Advanced Analysis and Pipeline
@@ -75,6 +75,15 @@ Additional advanced analysis:
 - Applying multiple regression or another advanced analytical method.
 - Providing further justification of methodological choices and referencing relevant documentation.
 
+#### Key findings (Part 2)
+
+- Age, BMI and sex are significantly associated with systolic blood pressure in the multiple regression, while cholesterol and smoking are not.
+- The regression model explains about 39.8 % of the variation (R² = 0.398).
+- No problematic multicollinearity (VIF 1.01–1.50).
+- Smoking is the only significant predictor of disease in the logistic regression (OR ≈ 2.0, p = 0.026).
+- The logistic model has limited discriminative ability (AUC = 0.631, calculated on training data, 47 disease cases).
+- The power simulation first exceeds 80 % at about 35,000 observations, given the observed difference of about 0.47 mmHg.
+
 ## Technologies and Libraries
 
 - **Python 3.14.7** – Main programming language.
@@ -82,6 +91,8 @@ Additional advanced analysis:
 - **NumPy** – Numerical computing and statistical simulations.
 - **Matplotlib & Seaborn** – Data visualization.
 - **SciPy** – Statistical methods and hypothesis testing.
+- **Statsmodels** – Regression models, regression diagnostics and VIF.
+- **scikit-learn** – Linear regression and ROC/AUC.
 - **Jupyter Notebook** – Interactive analysis and documentation.
 
 ## Visualization Standards
@@ -91,13 +102,13 @@ All charts and visualizations follow my [Data Visualization Policy](https://gith
 ## Repository Structure
 
 ```text
-health-study/
+PYSTDA45-assignment_health_study/
 │
 ├── data/
 │   └── health_study_dataset.csv
 │
 ├── images/
-│   └──okabe_ito_palette.png
+│   └── okabe_ito_palette.png
 │
 ├── notebooks/
 │   ├── health_study_part1.ipynb
