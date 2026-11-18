@@ -30,12 +30,13 @@ def summary_statistics(df: pd.DataFrame) -> pd.DataFrame:
                 'systolic_bp': 'Systoliskt blodtryck (mmHg):',
                 'cholesterol': 'Kolesterol (mmol/L):'}
 
-    return (df[list(columns)].agg(['mean', 'median', 'min', 'max']).T
+    return (df[list(columns)].agg(['mean', 'median', 'min', 'max', 'std']).T
                 .rename(index=columns,
                 columns={'mean': 'Medelvärde',
                          'median': 'Median',
                          'min': 'Min',
-                         'max': 'Max'}).round(2))
+                         'max': 'Max',
+                         'std': 'Std',},).round(2))
 
 
 def correlation_matrix(df: pd.DataFrame, method: str = 'pearson') -> pd.DataFrame:
@@ -506,7 +507,7 @@ def format_regression_results(results: dict[str, object]) -> tuple[pd.DataFrame,
         "Värde": [round(results["r_squared"], 4),
             round(results["adjusted_r_squared"], 4),
             results["n_observations"],
-            results["n_dropped"],],})
+            results["n_dropped"],],}, dtype=object)
 
     return coefficient_table, model_summary
 
