@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.axes import Axes
 import statsmodels.api as sm
+from sklearn.metrics import roc_curve, roc_auc_score
 
 
 # custom order for my okabe_ito palette (for white background) optimized order for greyscale
@@ -449,6 +450,38 @@ def plot_qq_residuals(results: dict[str, object], palette: list[str]) -> Axes:
     ax.grid(True)
 
     fig.tight_layout()
+    plt.show()
+
+    return ax
+
+from sklearn.metrics import roc_curve, roc_auc_score
+
+
+def plot_roc_curve(y_true: pd.Series, y_prob: pd.Series, palette: list[str]) -> Axes:
+    """
+    Calculate and plot the ROC curve with the AUC score.
+    Args:
+        y_true: Actual binary target values. 
+            from metrics logistic_regression()
+        y_prob: Predicted probabilities for the positive class.
+            from metrics logistic_regression()
+    """
+    fpr, tpr, _ = roc_curve(y_true, y_prob)
+    auc_score = roc_auc_score(y_true, y_prob)
+
+    _, ax = plt.subplots()
+
+    ax.plot(fpr, tpr, color=palette[0], label=f'Logistisk regression (AUC = {auc_score:.3f})')
+    ax.plot([0, 1], [0, 1],color=palette[1], linestyle='--', label='Slumpmässig klassificering')
+
+    ax.set(title='Modellens förmåga att identifiera sjukdom (ROC-kurva)',
+        xlabel='Andel falskt positiva (FPR)',
+        ylabel='Andel sant positiva (TPR)',
+        xlim=(0, 1),
+        ylim=(0, 1))
+
+    ax.legend(loc='lower right')
+    plt.tight_layout()
     plt.show()
 
     return ax

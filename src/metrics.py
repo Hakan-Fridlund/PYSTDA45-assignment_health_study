@@ -12,6 +12,7 @@ from sklearn.linear_model import LinearRegression
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 
 
+
 def summary_statistics(df: pd.DataFrame) -> pd.DataFrame:
     """
     Calculate mean, median, minimum and maximum for the study measurements.
@@ -532,3 +533,42 @@ def calculate_vif(results: dict[str, object]) -> pd.DataFrame:
                             "sex": "Kön"}}).rename(columns={"variable": "Variabel"})
 
     return vif_data
+
+
+def logistic_regression(df: pd.DataFrame,) -> tuple[pd.DataFrame, pd.Series, pd.Series]:
+    """
+    Perform logistic regression to investigate factors associatedwith disease.
+    Args:
+        DataFrame: containing disease and explanatory variables.
+    Returns:
+        Tuple containing regression results, actual disease values and predicted probabilities.
+    """
+    predictors = ['age', 'smoker', 'cholesterol', 'systolic_bp','bmi','sex']
+
+    X = df[predictors]
+    y = df['disease']
+
+    X = sm.add_constant(X)
+    model = sm.Logit(y, X).fit(disp=False)
+
+    odds_ratios = np.exp(model.params)
+    conf_int = np.exp(model.conf_int())
+
+    results = pd.DataFrame({'Oddskvot': odds_ratios,
+        '95 % KI nedre': conf_int[0],
+        '95 % KI övre': conf_int[1],
+        'p-värde': model.pvalues})
+
+    results = results.drop('const')
+
+    results = results.rename(index={'age': 'Ålder',
+                            'smoker': 'Rökning',
+                            'cholesterol': 'Kolesterol',
+                            'systolic_bp': 'Systoliskt blodtryck',
+                            'bmi': 'BMI',
+                            'sex': 'Kön'})
+
+    y_true = y.copy()
+    y_prob = model.predict(X)
+
+    return results, y_true, y_prob

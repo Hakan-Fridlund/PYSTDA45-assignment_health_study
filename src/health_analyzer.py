@@ -12,6 +12,7 @@ from . import data_utils, metrics, viz
 
 
 
+
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_PATH = PROJECT_ROOT / 'data' / 'health_study_dataset.csv'
 
@@ -105,6 +106,12 @@ class HealthAnalyzer():
         """Calculate variance inflation factors for regression predictors."""
         return metrics.calculate_vif(results)
 
+    def logistic_regression(self) -> tuple[pd.DataFrame, pd.Series, pd.Series]:
+        """Perform logistic regression to investigate factors associated with disease."""
+        return metrics.logistic_regression(self.df)
+
+
+
 
 #-------------------VIZ.PY functions-----------------------------------------
 
@@ -156,3 +163,7 @@ class HealthAnalyzer():
     def plot_qq_residuals(self, results: dict[str, object]) -> plt.Axes:
         """Plot a Q-Q plot to assess the normality of residuals."""
         return viz.plot_qq_residuals(results, viz.PALETTES[self.palette])
+
+    def plot_roc_curve(self, y_true: pd.Series, y_prob: pd.Series) -> plt.Axes:
+        """Plot ROC curve for logistic regression."""
+        viz.plot_roc_curve(y_true, y_prob, viz.PALETTES[self.palette])
