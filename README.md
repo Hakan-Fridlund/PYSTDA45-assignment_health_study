@@ -102,7 +102,7 @@ All charts and visualizations follow my [Data Visualization Policy](https://gith
 ## Repository Structure
 
 ```text
-PYSTDA45-assignment_health_study/
+PYSTDA45-PYSTDA45-assignment_health_study/
 │
 ├── data/
 │   └── health_study_dataset.csv
