@@ -84,5 +84,5 @@ For black-and-white printing, and whenever color separation is insufficient, add
 **Author manuscript (PDF):** https://strathprints.strath.ac.uk/30312/1/colorpaper_2006.pdf
 
 ## Okabe-Ito Customized Palette optimized for tritanopi.
-Is currently under evaluation as the best order for all categories.
+Is currently under evaluation as the best overall order.
 ![Okabe-Ito color palette](images/okabe_ito_tritanopi.png)
