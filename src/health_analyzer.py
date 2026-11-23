@@ -127,10 +127,10 @@ class HealthAnalyzer():
         """Plot smokers divided by sex as countplot (see viz)."""
         return viz.plot_smokers_by_sex(self.df, viz.PALETTES[self.palette])
 
-    def plot_chol_bp_corr(self) -> sns.FacetGrid:
+    def plot_chol_bp_corr(self, ci: int=95, n_boot: int = 5000) -> sns.FacetGrid:
         """Plot the scatterplot with correlation between cholesterol and systolic bloodpressure,
         by sex with separate regressionlines."""
-        return viz.plot_chol_bp_corr(self.df, viz.PALETTES[self.palette])
+        return viz.plot_chol_bp_corr(self.df, viz.PALETTES[self.palette], ci, n_boot)
 
     def plot_bp_by_disease(self) -> plt.Axes:
         """Plot systolic blood pressure distribution by disease status, combined box/swarmplot"""

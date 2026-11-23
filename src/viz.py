@@ -173,7 +173,7 @@ def plot_smokers_by_sex(df: pd.DataFrame, palette: list[str]) -> Axes:
     plt.show()
     return ax
 
-def plot_chol_bp_corr(df: pd.DataFrame, palette: list[str]) -> sns.FacetGrid:
+def plot_chol_bp_corr(df: pd.DataFrame, palette: list[str], ci: int=95, n_boot: int=5000) -> sns.FacetGrid:
     """
     Plot the relationship between cholesterol and systolic blood pressure,
     with separate regression lines for each sex.
@@ -186,8 +186,8 @@ def plot_chol_bp_corr(df: pd.DataFrame, palette: list[str]) -> sns.FacetGrid:
     """
 
     g = sns.lmplot(data=df, x='cholesterol', y='systolic_bp', hue='sex', palette=palette[:2],
-                   markers=['o', 'h'],height=6, aspect=1.5, scatter_kws={'alpha': 0.6}, ci=95,
-                   n_boot=5000, seed=42)
+                   markers=['o', 'h'],height=6, aspect=1.5, scatter_kws={'alpha': 0.6}, ci=ci,
+                   n_boot=n_boot, seed=42)
 
     g.set_axis_labels('Kolesterol (mmol/L)', 'Systoliskt blodtryck (mmHg)')
     g.figure.suptitle('Kolesterol i förhållande till systoliskt blodtryck', y=1.02)
