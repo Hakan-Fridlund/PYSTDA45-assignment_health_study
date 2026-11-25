@@ -82,7 +82,8 @@ For black-and-white printing, and whenever color separation is insufficient, add
   https://www.w3.org/TR/WCAG21/#non-text-contrast
 * Glasbey, C. A., van der Heijden, G., Toh, V. F. K., & Gray, A. (2007). *Colour displays for categorical images*. Colour Research & Application, 32(4), 304–309.
 **Author manuscript (PDF):** https://strathprints.strath.ac.uk/30312/1/colorpaper_2006.pdf
+* Machado, G. M., Oliveira, M. M., & Fernandes, L. A. F. (2009). *A Physiologically-based Model for Simulation of Color Vision Deficiency*. IEEE Transactions on Visualization and Computer Graphics, 15(6), 1291–1298. **Original paper (PDF):** [https://www.lume.ufrgs.br/bitstream/handle/10183/27630/000751721.pdf](https://www.lume.ufrgs.br/bitstream/handle/10183/27630/000751721.pdf)
 
 ## Okabe-Ito Customized Palette optimized for tritanopi.
-Is currently under evaluation as the best order for all categories.
+Is currently under evaluation as the best overall order.
 ![Okabe-Ito color palette](images/okabe_ito_tritanopi.png)
