@@ -34,7 +34,6 @@ HIST_FIGSIZE = (6.5, 5.5)
 
 sns.set_theme(
     style='whitegrid',
-    palette=okabe_ito,
     font='DejaVu Sans'
 )
 # SEABORN - For these diagram types saturation needs to be manually set to 1 (since standard=0.75)
@@ -42,7 +41,6 @@ sns.set_theme(
 
 plt.rcParams['figure.facecolor'] = 'white'
 plt.rcParams['axes.facecolor'] = 'white'
-plt.rcParams['axes.prop_cycle'] = plt.cycler(color=okabe_ito)
 
 plt.rcParams['font.family'] = 'DejaVu Sans'
 plt.rcParams['font.size'] = 11

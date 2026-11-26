@@ -498,7 +498,7 @@ def format_regression_results(results: dict[str, object]) -> tuple[pd.DataFrame,
         .rename_axis("Variabel"))
 
     coefficient_table = coefficient_table.round({"Koefficient": 3, "Standardfel": 3,
-                        "p-värde": 4, "95 % KI (nedre)": 3, "95 % KI (övre)": 3,}) 
+                        "p-värde": 5, "95 % KI (nedre)": 3, "95 % KI (övre)": 3,}) 
 
     model_summary = pd.DataFrame({"Modellmått": ["R²",
                     "Justerat R²",
