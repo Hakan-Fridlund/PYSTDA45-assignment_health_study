@@ -16,7 +16,7 @@ from sklearn.metrics import roc_curve, roc_auc_score
 okabe_ito = ['#0072B2','#E69F00','#009E73','#56B4E9','#D55E00','#CC79A7','#F0E442','#000000']
 
 # another order of okabe_ito I optimized for tritanopi,
-# best order overall, but not my favourite first 2 color pair
+# under evaluation as best overall order
 okabe_ito_tritanopi = ['#009E73','#E69F00','#0072B2','#CC79A7'
                        ,'#56B4E9','#D55E00','#F0E442','#000000']
 
@@ -29,15 +29,17 @@ PALETTES: dict[str, list[str]] = {'okabe_ito': okabe_ito,
     'okabe_ito_tritanopi': okabe_ito_tritanopi, 
     'glasbey_20': glasbey_20,}
 
-# To set histogram figsizes, recommended on histplots
+# To set histogram figsizes, recommended on histplots for better bellshapes
 HIST_FIGSIZE = (6.5, 5.5)
 
 sns.set_theme(
     style='whitegrid',
     font='DejaVu Sans'
 )
-# SEABORN - For these diagram types saturation needs to be manually set to 1 (since standard=0.75)
+#====IMPORTANT================================================================================================
+# SEABORN - For these diagram types (see below) saturation needs to be manually set to 1 (since standard=0.75)
 # sns.barplot() /sns.countplot() / sns.boxplot() / sns.violinplot()	/ sns.boxenplot()
+#=============================================================================================================
 
 plt.rcParams['figure.facecolor'] = 'white'
 plt.rcParams['axes.facecolor'] = 'white'
@@ -57,7 +59,7 @@ plt.rcParams['legend.title_fontsize'] = 11
 plt.rcParams['legend.frameon'] = False
 plt.rcParams['legend.loc'] = 'best'
 plt.rcParams['legend.borderaxespad'] = 0.8
-# removes the top and right spines (frame) from axes
+
 plt.rcParams['axes.linewidth'] = 0.8
 plt.rcParams['axes.spines.top'] = False
 plt.rcParams['axes.spines.right'] = False
