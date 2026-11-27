@@ -166,7 +166,7 @@ def plot_smokers_by_sex(df: pd.DataFrame, palette: list[str]) -> Axes:
     ax.set_xticks([0, 1])
     ax.set_xticklabels(['Nej', 'Ja'])
 
-    ax.legend_.set_title('Sex')
+    ax.legend_.set_title('Kön')
     ax.legend_.texts[0].set_text('Kvinna')
     ax.legend_.texts[1].set_text('Man')
     plt.tight_layout()
